@@ -1,6 +1,7 @@
 import type { Metadata } from 'next';
 import './globals.css';
 import { Toaster } from "@/components/ui/toaster";
+import ChatWidget from '@/components/landing/chat-widget';
 
 export const metadata: Metadata = {
   title: 'Postflow AI - AI-Powered Social Media Posts',
@@ -21,6 +22,7 @@ export default function RootLayout({
       </head>
       <body className="font-body antialiased">
         {children}
+        <ChatWidget />
         <Toaster />
       </body>
     </html>
