@@ -1,6 +1,6 @@
 'use client';
 
-import { useState, useEffect } from 'react';
+import { useState, useEffect, useTransition } from 'react';
 import { Area, AreaChart, CartesianGrid, XAxis, YAxis } from 'recharts';
 
 import {
@@ -15,111 +15,56 @@ import {
   ChartTooltip,
   ChartTooltipContent,
 } from '@/components/ui/chart';
+import { Button } from '@/components/ui/button';
+import { handleGetCryptoPrice } from '@/app/actions';
+import { Skeleton } from '../ui/skeleton';
 
-const initialStockData = [
-  {
-    name: 'AAPL',
-    data: [
-      { date: '2024-01-01', value: 185.64 },
-      { date: '2024-01-02', value: 188.04 },
-      { date: '2024-01-03', value: 184.25 },
-      { date: '2024-01-04', value: 185.56 },
-      { date: '2024-01-05', value: 181.18 },
-      { date: '2024-01-06', value: 185.14 },
-    ],
-    color: 'hsl(var(--chart-1))',
-  },
-  {
-    name: 'GOOGL',
-    data: [
-        { date: '2024-01-01', value: 139.53 },
-        { date: '2024-01-02', value: 140.93 },
-        { date: '2024-01-03', value: 138.83 },
-        { date: '2024-01-04', value: 139.78 },
-        { date: '2024-01-05', value: 141.34 },
-        { date: '2024-01-06', value: 142.11 },
-    ],
-    color: 'hsl(var(--chart-2))',
-  },
-  {
-    name: 'TSLA',
-    data: [
-        { date: '2024-01-01', value: 248.48 },
-        { date: '2024-01-02', value: 240.05 },
-        { date: '2024-01-03', value: 238.45 },
-        { date: '2024-01-04', value: 237.49 },
-        { date: '2024-01-05', value: 245.26 },
-        { date: '2024-01-06', value: 241.76 },
-    ],
-    color: 'hsl(var(--chart-3))',
-  },
-];
-
-const initialCryptoData = [
-  {
-    name: 'BTC',
-    data: [
-      { date: '2024-07-01', value: 61000 },
-      { date: '2024-07-02', value: 63000 },
-      { date: '2024-07-03', value: 62500 },
-      { date: '2024-07-04', value: 64000 },
-      { date: '2024-07-05', value: 65000 },
-      { date: '2024-07-06', value: 64800 },
-    ],
-    color: 'hsl(var(--chart-4))',
-  },
-  {
-    name: 'ETH',
-    data: [
-      { date: '2024-07-01', value: 3400 },
-      { date: '2024-07-02', value: 3500 },
-      { date: '2024-07-03', value: 3450 },
-      { date: '2024-07-04', value: 3550 },
-      { date: '2024-07-05', value: 3600 },
-      { date: '2024-07-06', value: 3580 },
-    ],
-    color: 'hsl(var(--chart-5))',
-  },
-];
-
-type DataType = typeof initialStockData | typeof initialCryptoData;
+const chartConfig = {
+    value: {
+      label: 'Price (USD)',
+    },
+};
 
 const MarketChartSection = () => {
-  const [stockData, setStockData] = useState(initialStockData);
-  const [cryptoData, setCryptoData] = useState(initialCryptoData);
+  const [btcPrice, setBtcPrice] = useState<number | null>(null);
+  const [ethPrice, setEthPrice] = useState<number | null>(null);
+  const [isPending, startTransition] = useTransition();
 
-  const chartConfig = {
-    value: {
-      label: 'Value',
-    },
+  const fetchPrices = () => {
+    startTransition(async () => {
+      const btcResult = await handleGetCryptoPrice('bitcoin');
+      if ('price' in btcResult) {
+        setBtcPrice(btcResult.price);
+      }
+
+      const ethResult = await handleGetCryptoPrice('ethereum');
+      if ('price' in ethResult) {
+        setEthPrice(ethResult.price);
+      }
+    });
   };
 
   useEffect(() => {
-    const interval = setInterval(() => {
-      const updateData = (data: DataType): DataType => {
-        return data.map(item => {
-          const newData = [...item.data];
-          const lastValue = newData[newData.length - 1].value;
-          const change = lastValue * (Math.random() - 0.5) * 0.05; // 5% random change
-          const newValue = parseFloat((lastValue + change).toFixed(2));
-          const newDate = new Date(newData[newData.length - 1].date);
-          newDate.setDate(newDate.getDate() + 1);
-
-          newData.shift();
-          newData.push({ date: newDate.toISOString().split('T')[0], value: newValue });
-
-          return { ...item, data: newData };
-        });
-      };
-      
-      setStockData(prevData => updateData(prevData));
-      setCryptoData(prevData => updateData(prevData));
-
-    }, 3000); // Update every 3 seconds
-
-    return () => clearInterval(interval);
+    fetchPrices();
   }, []);
 
+  const generateChartData = (price: number | null) => {
+    if (!price) {
+        return Array(6).fill({}).map((_, i) => ({
+            date: `Day ${i+1}`,
+            value: 0
+        }));
+    }
+    const data = [];
+    for (let i = 5; i >= 0; i--) {
+        const date = new Date();
+        date.setDate(date.getDate() - i);
+        const randomFactor = (Math.random() - 0.5) * 0.1; // +/- 5%
+        const value = price * (1 - (i * 0.02)) * (1 + randomFactor);
+        data.push({ date: date.toISOString().split('T')[0], value: parseFloat(value.toFixed(2)) });
+    }
+    return data;
+  }
 
   return (
     <section id="markets" className="py-20 md:py-32 bg-secondary">
@@ -127,109 +72,56 @@ const MarketChartSection = () => {
         <div className="text-center max-w-3xl mx-auto mb-12">
           <h2 className="text-3xl md:text-4xl font-bold">Live Market Overview</h2>
           <p className="mt-4 text-lg text-muted-foreground">
-            Stay updated with the latest trends in the stock and crypto markets.
+            Stay updated with the latest trends in the crypto market.
           </p>
         </div>
 
-        <div className="mb-12">
-            <h3 className="text-2xl font-bold text-center mb-8">Stock Market</h3>
-            <div className="grid grid-cols-1 md:grid-cols-3 gap-8">
-            {stockData.map((stock) => (
-                <Card key={stock.name}>
-                <CardHeader>
-                    <CardTitle>{stock.name}</CardTitle>
-                    <CardDescription>Live price trend</CardDescription>
-                </CardHeader>
-                <CardContent>
-                    <ChartContainer config={chartConfig} className="w-full h-[200px]">
-                    <AreaChart
-                        data={stock.data}
-                        margin={{ left: 12, right: 12 }}
-                        accessibilityLayer
-                    >
-                        <CartesianGrid vertical={false} />
-                        <XAxis
-                        dataKey="date"
-                        tickLine={false}
-                        axisLine={false}
-                        tickMargin={8}
-                        tickFormatter={(value) => new Date(value).toLocaleDateString('en-US', { month: 'short', day: 'numeric' })}
-                        />
-                        <YAxis
-                        tickLine={false}
-                        axisLine={false}
-                        tickMargin={8}
-                        domain={['dataMin - 5', 'dataMax + 5']}
-                        hide
-                        />
-                        <ChartTooltip
-                        cursor={false}
-                        content={<ChartTooltipContent indicator="line" />}
-                        />
-                        <Area
-                        dataKey="value"
-                        type="natural"
-                        fill={stock.color}
-                        fillOpacity={0.4}
-                        stroke={stock.color}
-                        stackId="a"
-                        />
-                    </AreaChart>
-                    </ChartContainer>
-                </CardContent>
-                </Card>
-            ))}
-            </div>
+        <div className="text-center mb-8">
+            <Button onClick={fetchPrices} disabled={isPending}>
+                {isPending ? 'Refreshing...' : 'Refresh Prices'}
+            </Button>
         </div>
 
         <div>
-            <h3 className="text-2xl font-bold text-center mb-8">Crypto Market</h3>
             <div className="grid grid-cols-1 md:grid-cols-2 gap-8">
-            {cryptoData.map((crypto) => (
-                <Card key={crypto.name}>
-                <CardHeader>
-                    <CardTitle>{crypto.name}</CardTitle>
-                    <CardDescription>Live price trend</CardDescription>
-                </CardHeader>
-                <CardContent>
-                    <ChartContainer config={chartConfig} className="w-full h-[200px]">
-                    <AreaChart
-                        data={crypto.data}
-                        margin={{ left: 12, right: 12 }}
-                        accessibilityLayer
-                    >
-                        <CartesianGrid vertical={false} />
-                        <XAxis
-                        dataKey="date"
-                        tickLine={false}
-                        axisLine={false}
-                        tickMargin={8}
-                        tickFormatter={(value) => new Date(value).toLocaleDateString('en-US', { month: 'short', day: 'numeric' })}
-                        />
-                        <YAxis
-                        tickLine={false}
-                        axisLine={false}
-                        tickMargin={8}
-                        domain={['dataMin - 100', 'dataMax + 100']}
-                        hide
-                        />
-                        <ChartTooltip
-                        cursor={false}
-                        content={<ChartTooltipContent indicator="line" />}
-                        />
-                        <Area
-                        dataKey="value"
-                        type="natural"
-                        fill={crypto.color}
-                        fillOpacity={0.4}
-                        stroke={crypto.color}
-                        stackId="a"
-                        />
-                    </AreaChart>
-                    </ChartContainer>
-                </CardContent>
+                <Card>
+                    <CardHeader>
+                        <CardTitle>BTC (Bitcoin)</CardTitle>
+                        <CardDescription>
+                            Current Price: {isPending ? <Skeleton className="h-6 w-24 inline-block" /> : btcPrice ? `$${btcPrice.toLocaleString()}` : 'N/A'}
+                        </CardDescription>
+                    </CardHeader>
+                    <CardContent>
+                        <ChartContainer config={chartConfig} className="w-full h-[200px]">
+                            <AreaChart data={generateChartData(btcPrice)} margin={{ left: 12, right: 12 }} accessibilityLayer>
+                                <CartesianGrid vertical={false} />
+                                <XAxis dataKey="date" tickLine={false} axisLine={false} tickMargin={8} tickFormatter={(value) => new Date(value).toLocaleDateString('en-US', { month: 'short', day: 'numeric' })} />
+                                <YAxis tickLine={false} axisLine={false} tickMargin={8} domain={['dataMin - 100', 'dataMax + 100']} hide />
+                                <ChartTooltip cursor={false} content={<ChartTooltipContent indicator="line" />} />
+                                <Area dataKey="value" type="natural" fill={'hsl(var(--chart-4))'} fillOpacity={0.4} stroke={'hsl(var(--chart-4))'} stackId="a" />
+                            </AreaChart>
+                        </ChartContainer>
+                    </CardContent>
                 </Card>
-            ))}
+                <Card>
+                    <CardHeader>
+                        <CardTitle>ETH (Ethereum)</CardTitle>
+                        <CardDescription>
+                            Current Price: {isPending ? <Skeleton className="h-6 w-24 inline-block" /> : ethPrice ? `$${ethPrice.toLocaleString()}` : 'N/A'}
+                        </CardDescription>
+                    </CardHeader>
+                    <CardContent>
+                        <ChartContainer config={chartConfig} className="w-full h-[200px]">
+                            <AreaChart data={generateChartData(ethPrice)} margin={{ left: 12, right: 12 }} accessibilityLayer>
+                                <CartesianGrid vertical={false} />
+                                <XAxis dataKey="date" tickLine={false} axisLine={false} tickMargin={8} tickFormatter={(value) => new Date(value).toLocaleDateString('en-US', { month: 'short', day: 'numeric' })} />
+                                <YAxis tickLine={false} axisLine={false} tickMargin={8} domain={['dataMin - 100', 'dataMax + 100']} hide />
+                                <ChartTooltip cursor={false} content={<ChartTooltipContent indicator="line" />} />
+                                <Area dataKey="value" type="natural" fill={'hsl(var(--chart-5))'} fillOpacity={0.4} stroke={'hsl(var(--chart-5))'} stackId="a" />
+                            </AreaChart>
+                        </ChartContainer>
+                    </CardContent>
+                </Card>
             </div>
         </div>
       </div>

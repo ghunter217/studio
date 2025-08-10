@@ -1,7 +1,9 @@
 'use server';
 
 import { optimizeCallToAction } from '@/ai/flows/optimize-call-to-action';
+import { getCryptoPrice } from '@/ai/flows/get-crypto-price';
 import { OptimizeCallToActionInput, OptimizeCallToActionOutput } from '@/ai/schemas/optimize-call-to-action';
+import { CryptoPriceInput, CryptoPriceOutput } from '@/ai/schemas/get-crypto-price';
 import { z } from 'zod';
 
 const CtaSchema = z.object({
@@ -48,6 +50,17 @@ export async function handleOptimizeCta(
     return {
       message: 'An error occurred while optimizing the CTA. Please try again.',
       isSuccess: false,
+    };
+  }
+}
+
+export async function handleGetCryptoPrice(ticker: string): Promise<CryptoPriceOutput | { error: string }> {
+  try {
+    const result = await getCryptoPrice({ ticker });
+    return result;
+  } catch (error: any) {
+    return {
+      error: error.message || 'An error occurred while fetching the price.',
     };
   }
 }
