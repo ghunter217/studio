@@ -7,10 +7,10 @@ const HeroSection = () => {
       <div className="container grid grid-cols-1 md:grid-cols-2 gap-12 items-center">
         <div className="space-y-6 text-center md:text-left">
           <h1 className="text-4xl md:text-6xl font-extrabold tracking-tighter">
-            The Future of Automated Trading is Here
+            The Future of Social Media is Here
           </h1>
           <p className="text-lg text-muted-foreground md:text-xl">
-            Lumina leverages cutting-edge AI to trade crypto, stocks, and make bets for you. Maximize your profits with our intelligent, automated bot.
+            Postflow AI leverages cutting-edge AI to generate engaging social media posts for you. Boost your online presence with our intelligent, automated tool.
           </p>
           <div className="flex flex-col sm:flex-row gap-4 justify-center md:justify-start">
             <Button size="lg">Start Your Free Trial</Button>
@@ -20,11 +20,11 @@ const HeroSection = () => {
         <div className="flex justify-center">
           <Image
             src="https://placehold.co/600x400.png"
-            alt="AI Trading Bot Dashboard"
+            alt="AI social media post generator dashboard"
             width={600}
             height={400}
             className="rounded-xl shadow-2xl"
-            data-ai-hint="trading bot"
+            data-ai-hint="social media"
           />
         </div>
       </div>

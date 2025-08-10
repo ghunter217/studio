@@ -8,10 +8,10 @@ const Footer = () => {
           <div className="lg:col-span-4 flex flex-col items-start">
             <div className="flex items-center mb-4">
               <Bot className="h-8 w-8 mr-2 text-primary" />
-              <span className="text-xl font-bold">Lumina</span>
+              <span className="text-xl font-bold">Postflow AI</span>
             </div>
             <p className="text-sm text-muted-foreground max-w-xs">
-              Automated AI trading bot for crypto, stocks, and more.
+              Automated AI content generation for social media.
             </p>
           </div>
           <div className="lg:col-span-8 grid grid-cols-2 md:grid-cols-4 gap-8">
@@ -50,7 +50,7 @@ const Footer = () => {
         </div>
         <div className="border-t mt-8 pt-6 flex flex-col sm:flex-row justify-between items-center">
           <p className="text-sm text-muted-foreground">
-            &copy; {new Date().getFullYear()} Lumina. All rights reserved.
+            &copy; {new Date().getFullYear()} Postflow AI. All rights reserved.
           </p>
           <div className="flex space-x-4 mt-4 sm:mt-0">
             <a href="#" className="text-muted-foreground hover:text-primary transition-colors"><Twitter className="h-5 w-5" /></a>

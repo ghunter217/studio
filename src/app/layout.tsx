@@ -3,8 +3,8 @@ import './globals.css';
 import { Toaster } from "@/components/ui/toaster";
 
 export const metadata: Metadata = {
-  title: 'Lumina - AI Trading Bot',
-  description: 'Leverage cutting-edge AI to automate your crypto and stock trading. Maximize profits with Lumina.',
+  title: 'Postflow AI - AI-Powered Social Media Posts',
+  description: 'Leverage cutting-edge AI to generate engaging social media posts. Boost your online presence with Postflow AI.',
 };
 
 export default function RootLayout({

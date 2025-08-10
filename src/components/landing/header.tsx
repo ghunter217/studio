@@ -9,7 +9,7 @@ const Header = () => {
       <div className="container flex h-14 items-center">
         <div className="mr-4 flex items-center">
           <Bot className="h-6 w-6 mr-2 text-primary" />
-          <span className="font-bold">Lumina</span>
+          <span className="font-bold">Postflow AI</span>
         </div>
         <div className="flex flex-1 items-center justify-end space-x-2">
           <Button>Get Started</Button>

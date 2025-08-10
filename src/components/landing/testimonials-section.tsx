@@ -4,21 +4,21 @@ import { Avatar, AvatarFallback, AvatarImage } from '@/components/ui/avatar';
 const testimonials = [
   {
     name: 'Sarah J.',
-    role: 'Day Trader',
+    role: 'Social Media Manager',
     avatar: 'https://placehold.co/40x40.png',
-    testimonial: 'Lumina has completely transformed my trading strategy. The AI is incredibly smart, and I\'ve seen a 40% increase in my profits in just two months!'
+    testimonial: 'Postflow AI has completely transformed my content strategy. The AI is incredibly smart, and I\'ve seen a 40% increase in my engagement in just two months!'
   },
   {
     name: 'Mark C.',
-    role: 'Crypto Enthusiast',
+    role: 'Startup Founder',
     avatar: 'https://placehold.co/40x40.png',
-    testimonial: 'I was skeptical about automated trading bots, but Lumina proved me wrong. It\'s easy to use, secure, and the results speak for themselves. Highly recommended.'
+    testimonial: 'I was skeptical about AI content tools, but Postflow AI proved me wrong. It\'s easy to use, and the results speak for themselves. Highly recommended.'
   },
   {
     name: 'Emily R.',
-    role: 'Hedge Fund Analyst',
+    role: 'Marketing Analyst',
     avatar: 'https://placehold.co/40x40.png',
-    testimonial: 'The predictive analytics are on par with some of the institutional tools I use. It\'s an impressive piece of technology for the retail investor.'
+    testimonial: 'The post analytics are on par with some of the institutional tools I use. It\'s an impressive piece of technology for any business.'
   }
 ];
 
@@ -27,9 +27,9 @@ const TestimonialsSection = () => {
     <section id="testimonials" className="py-20 md:py-32">
       <div className="container">
         <div className="text-center max-w-3xl mx-auto mb-12">
-          <h2 className="text-3xl md:text-4xl font-bold">Trusted by Traders Worldwide</h2>
+          <h2 className="text-3xl md:text-4xl font-bold">Trusted by Marketers Worldwide</h2>
           <p className="mt-4 text-lg text-muted-foreground">
-            Hear what our users have to say about their success with Lumina.
+            Hear what our users have to say about their success with Postflow AI.
           </p>
         </div>
         <div className="grid grid-cols-1 md:grid-cols-3 gap-8">
