@@ -11,7 +11,7 @@ const Footer = () => {
               <span className="text-xl font-bold">Postflow AI</span>
             </div>
             <p className="text-sm text-muted-foreground max-w-xs">
-              Automated AI content generation for social media.
+              Automated AI trading bot for stocks and crypto.
             </p>
           </div>
           <div className="lg:col-span-8 grid grid-cols-2 md:grid-cols-4 gap-8">

@@ -7,10 +7,10 @@ const HeroSection = () => {
       <div className="container grid grid-cols-1 md:grid-cols-2 gap-12 items-center">
         <div className="space-y-6 text-center md:text-left">
           <h1 className="text-4xl md:text-6xl font-extrabold tracking-tighter">
-            The Future of Social Media is Here
+            The Future of Trading is Here
           </h1>
           <p className="text-lg text-muted-foreground md:text-xl">
-            Postflow AI leverages cutting-edge AI to generate engaging social media posts for you. Boost your online presence with our intelligent, automated tool.
+            Postflow AI is an intelligent, automated trading bot that leverages cutting-edge AI to execute trades for you. Boost your portfolio with our intelligent, automated tool.
           </p>
           <div className="flex flex-col sm:flex-row gap-4 justify-center md:justify-start">
             <Button size="lg">Start Your Free Trial</Button>

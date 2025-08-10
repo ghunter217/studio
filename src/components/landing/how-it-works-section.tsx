@@ -4,23 +4,23 @@ import { Rocket, Target, PenTool, TrendingUp } from 'lucide-react';
 const steps = [
   {
     icon: <Rocket className="w-10 h-10 text-primary" />,
-    title: '1. Connect Your Accounts',
-    description: 'Securely connect your social media profiles. We support all major platforms.',
+    title: '1. Connect Your Exchange',
+    description: 'Securely connect your cryptocurrency exchange accounts. We support all major platforms.',
   },
   {
     icon: <Target className="w-10 h-10 text-primary" />,
-    title: '2. Define Your Audience',
-    description: 'Tell our AI about your target audience and content goals for tailored post suggestions.',
+    title: '2. Define Your Strategy',
+    description: 'Tell our AI about your risk tolerance and investment goals for tailored trading strategies.',
   },
   {
     icon: <PenTool className="w-10 h-10 text-primary" />,
-    title: '3. Generate & Schedule',
-    description: 'Review AI-generated posts, make tweaks if needed, and schedule them to go live.',
+    title: '3. Activate The Bot',
+    description: 'Review the AI-generated strategy, make tweaks if needed, and activate your trading bot.',
   },
   {
     icon: <TrendingUp className="w-10 h-10 text-primary" />,
     title: '4. Track Performance',
-    description: 'Monitor engagement and reach with our built-in analytics to refine your strategy.',
+    description: 'Monitor your portfolio growth with our built-in analytics to refine your strategy.',
   },
 ];
 
@@ -31,7 +31,7 @@ const HowItWorksSection = () => {
         <div className="text-center max-w-3xl mx-auto mb-12">
           <h2 className="text-3xl md:text-4xl font-bold">Get Started in Minutes</h2>
           <p className="mt-4 text-lg text-muted-foreground">
-            Our streamlined process makes it easy to automate your social media presence.
+            Our streamlined process makes it easy to automate your trading.
           </p>
         </div>
         <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-8">
