@@ -7,8 +7,8 @@ import Link from 'next/link';
 const Header = () => {
   return (
     <header className="sticky top-0 z-50 w-full border-b border-border/40 bg-background/95 backdrop-blur supports-[backdrop-filter]:bg-background/60">
-      <div className="container flex h-14 items-center">
-        <div className="mr-auto flex items-center">
+      <div className="container flex h-14 items-center justify-between">
+        <div className="flex items-center">
           <Bot className="h-6 w-6 mr-2 text-primary" />
           <span className="font-bold">Postflow AI</span>
         </div>
