@@ -12,7 +12,7 @@ const Header = () => {
           <Bot className="h-6 w-6 mr-2 text-primary" />
           <span className="font-bold">Postflow AI</span>
         </div>
-        <nav className="hidden md:flex items-center space-x-2 text-sm font-medium">
+        <nav className="hidden md:flex items-center space-x-2 text-sm font-medium ml-auto">
           <Button>Get Started</Button>
           <Button variant="ghost" asChild>
             <Link href="#features">
@@ -22,6 +22,11 @@ const Header = () => {
           <Button variant="ghost" asChild>
             <Link href="#how-it-works">
               How It Works
+            </Link>
+          </Button>
+          <Button variant="ghost" asChild>
+            <Link href="#testimonials">
+              Testimonials
             </Link>
           </Button>
           <Button variant="ghost" asChild>
