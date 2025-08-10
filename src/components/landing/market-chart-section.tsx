@@ -82,6 +82,8 @@ const initialCryptoData = [
   },
 ];
 
+type DataType = typeof initialStockData | typeof initialCryptoData;
+
 const MarketChartSection = () => {
   const [stockData, setStockData] = useState(initialStockData);
   const [cryptoData, setCryptoData] = useState(initialCryptoData);
@@ -94,7 +96,7 @@ const MarketChartSection = () => {
 
   useEffect(() => {
     const interval = setInterval(() => {
-      const updateData = (data: typeof initialStockData | typeof initialCryptoData) => {
+      const updateData = (data: DataType): DataType => {
         return data.map(item => {
           const newData = [...item.data];
           const lastValue = newData[newData.length - 1].value;
@@ -110,13 +112,13 @@ const MarketChartSection = () => {
         });
       };
       
-      setStockData(updateData(stockData));
-      setCryptoData(updateData(cryptoData));
+      setStockData(prevData => updateData(prevData));
+      setCryptoData(prevData => updateData(prevData));
 
     }, 3000); // Update every 3 seconds
 
     return () => clearInterval(interval);
-  }, [stockData, cryptoData]);
+  }, []);
 
 
   return (
