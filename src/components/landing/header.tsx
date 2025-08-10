@@ -2,6 +2,7 @@
 
 import { Button } from '@/components/ui/button';
 import { Bot } from 'lucide-react';
+import Link from 'next/link';
 
 const Header = () => {
   return (
@@ -11,6 +12,17 @@ const Header = () => {
           <Bot className="h-6 w-6 mr-2 text-primary" />
           <span className="font-bold">Postflow AI</span>
         </div>
+        <nav className="hidden md:flex items-center space-x-6 text-sm font-medium">
+          <Link href="#features" className="text-foreground/60 transition-colors hover:text-foreground/80">
+            Features
+          </Link>
+          <Link href="#how-it-works" className="text-foreground/60 transition-colors hover:text-foreground/80">
+            How It Works
+          </Link>
+          <Link href="#contact" className="text-foreground/60 transition-colors hover:text-foreground/80">
+            Contact
+          </Link>
+        </nav>
         <div className="flex flex-1 items-center justify-end space-x-2">
           <Button>Get Started</Button>
         </div>

@@ -2,7 +2,7 @@ import { Bot, Twitter, Linkedin, Github } from 'lucide-react';
 
 const Footer = () => {
   return (
-    <footer className="border-t">
+    <footer className="border-t bg-secondary">
       <div className="container py-12">
         <div className="grid grid-cols-1 lg:grid-cols-12 gap-8">
           <div className="lg:col-span-4 flex flex-col items-start">
@@ -19,6 +19,7 @@ const Footer = () => {
               <h4 className="font-semibold mb-3">Product</h4>
               <ul className="space-y-2">
                 <li><a href="#features" className="text-sm text-muted-foreground hover:text-primary transition-colors">Features</a></li>
+                <li><a href="#how-it-works" className="text-sm text-muted-foreground hover:text-primary transition-colors">How It Works</a></li>
                 <li><a href="#testimonials" className="text-sm text-muted-foreground hover:text-primary transition-colors">Testimonials</a></li>
                 <li><a href="#" className="text-sm text-muted-foreground hover:text-primary transition-colors">Pricing</a></li>
               </ul>
@@ -28,7 +29,7 @@ const Footer = () => {
               <ul className="space-y-2">
                 <li><a href="#" className="text-sm text-muted-foreground hover:text-primary transition-colors">About Us</a></li>
                 <li><a href="#" className="text-sm text-muted-foreground hover:text-primary transition-colors">Careers</a></li>
-                <li><a href="#" className="text-sm text-muted-foreground hover:text-primary transition-colors">Contact</a></li>
+                <li><a href="#contact" className="text-sm text-muted-foreground hover:text-primary transition-colors">Contact</a></li>
               </ul>
             </div>
             <div>

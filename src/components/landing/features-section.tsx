@@ -26,7 +26,7 @@ const features = [
 
 const FeaturesSection = () => {
   return (
-    <section id="features" className="py-20 md:py-32 bg-secondary">
+    <section id="features" className="py-20 md:py-32 bg-background">
       <div className="container">
         <div className="text-center max-w-3xl mx-auto mb-12">
           <h2 className="text-3xl md:text-4xl font-bold">Why Choose Postflow AI?</h2>
@@ -36,7 +36,7 @@ const FeaturesSection = () => {
         </div>
         <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-8">
           {features.map((feature, index) => (
-            <Card key={index} className="flex flex-col items-center text-center p-6 hover:shadow-xl hover:-translate-y-2 transition-all duration-300">
+            <Card key={index} className="flex flex-col items-center text-center p-6 bg-secondary border-secondary hover:shadow-xl hover:-translate-y-2 transition-all duration-300">
               <CardHeader className="p-0 mb-4">
                 {feature.icon}
               </CardHeader>
