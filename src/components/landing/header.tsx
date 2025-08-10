@@ -13,6 +13,7 @@ const Header = () => {
           <span className="font-bold">Postflow AI</span>
         </div>
         <nav className="hidden md:flex items-center space-x-2 text-sm font-medium">
+          <Button>Get Started</Button>
           <Button variant="ghost" asChild>
             <Link href="#features">
               Features
@@ -29,9 +30,6 @@ const Header = () => {
             </Link>
           </Button>
         </nav>
-        <div className="flex items-center justify-end space-x-2 ml-4">
-          <Button>Get Started</Button>
-        </div>
       </div>
     </header>
   );
