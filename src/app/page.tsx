@@ -2,6 +2,7 @@ import Header from '@/components/landing/header';
 import HeroSection from '@/components/landing/hero-section';
 import FeaturesSection from '@/components/landing/features-section';
 import HowItWorksSection from '@/components/landing/how-it-works-section';
+import MarketChartSection from '@/components/landing/market-chart-section';
 import TestimonialsSection from '@/components/landing/testimonials-section';
 import CtaOptimizerSection from '@/components/landing/cta-optimizer-section';
 import ContactSection from '@/components/landing/contact-section';
@@ -15,6 +16,7 @@ export default function Home() {
         <HeroSection />
         <FeaturesSection />
         <HowItWorksSection />
+        <MarketChartSection />
         <TestimonialsSection />
         <CtaOptimizerSection />
         <ContactSection />
