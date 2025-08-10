@@ -1,6 +1,7 @@
 'use server';
 
-import { optimizeCallToAction, OptimizeCallToActionInput, OptimizeCallToActionOutput } from '@/ai/flows/optimize-call-to-action';
+import { optimizeCallToAction } from '@/ai/flows/optimize-call-to-action';
+import { OptimizeCallToActionInput, OptimizeCallToActionOutput } from '@/ai/schemas/optimize-call-to-action';
 import { z } from 'zod';
 
 const CtaSchema = z.object({
