@@ -8,22 +8,28 @@ const Header = () => {
   return (
     <header className="sticky top-0 z-50 w-full border-b border-border/40 bg-background/95 backdrop-blur supports-[backdrop-filter]:bg-background/60">
       <div className="container flex h-14 items-center">
-        <div className="mr-4 flex items-center">
+        <div className="mr-auto flex items-center">
           <Bot className="h-6 w-6 mr-2 text-primary" />
           <span className="font-bold">Postflow AI</span>
         </div>
-        <nav className="hidden md:flex items-center space-x-6 text-sm font-medium">
-          <Link href="#features" className="text-foreground/60 transition-colors hover:text-foreground/80">
-            Features
-          </Link>
-          <Link href="#how-it-works" className="text-foreground/60 transition-colors hover:text-foreground/80">
-            How It Works
-          </Link>
-          <Link href="#contact" className="text-foreground/60 transition-colors hover:text-foreground/80">
-            Contact
-          </Link>
+        <nav className="hidden md:flex items-center space-x-2 text-sm font-medium">
+          <Button variant="ghost" asChild>
+            <Link href="#features">
+              Features
+            </Link>
+          </Button>
+          <Button variant="ghost" asChild>
+            <Link href="#how-it-works">
+              How It Works
+            </Link>
+          </Button>
+          <Button variant="ghost" asChild>
+            <Link href="#contact">
+              Contact
+            </Link>
+          </Button>
         </nav>
-        <div className="flex flex-1 items-center justify-end space-x-2">
+        <div className="flex items-center justify-end space-x-2 ml-4">
           <Button>Get Started</Button>
         </div>
       </div>
