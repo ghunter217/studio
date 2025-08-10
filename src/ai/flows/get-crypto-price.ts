@@ -57,10 +57,32 @@ const getCryptoPriceFlow = ai.defineFlow(
     },
     async (input) => {
         const llmResponse = await prompt(input);
-        const price = llmResponse.toolRequest?.tool.input.price;
+        const toolResponse = llmResponse.toolRequest?.tool.output as { price: number } | undefined;
 
-        return {
-            price: price as number,
-        };
+        if (toolResponse?.price) {
+            return {
+                price: toolResponse.price,
+            };
+        }
+
+        // It's possible the model doesn't use the tool and just returns the price directly.
+        // Let's check the structured output.
+        const outputPrice = llmResponse.output?.price;
+        if(outputPrice) {
+            return {
+                price: outputPrice
+            }
+        }
+
+        // As a last resort, maybe it just returned text.
+        const textResponse = llmResponse.text;
+        const priceMatch = textResponse?.match(/\$(\d+\.?\d*)/);
+        if(priceMatch?.[1]) {
+            return {
+                price: parseFloat(priceMatch[1])
+            }
+        }
+        
+        throw new Error(`Could not determine price for ${input.ticker}`);
     }
 );
