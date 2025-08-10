@@ -27,7 +27,7 @@ const steps = [
 const HowItWorksSection = () => {
   return (
     <section id="how-it-works" className="py-20 md:py-32 animate-in fade-in-50 duration-1000">
-      <div className="container">
+      <div className="container px-4 md:px-6">
         <div className="text-center max-w-3xl mx-auto mb-12">
           <h2 className="text-3xl md:text-4xl font-bold">Get Started in Minutes</h2>
           <p className="mt-4 text-lg text-muted-foreground">

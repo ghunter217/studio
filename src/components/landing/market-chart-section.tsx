@@ -54,6 +54,7 @@ const MarketChartSection = () => {
   const updateChartData = (price: number | null, setter: React.Dispatch<React.SetStateAction<any[]>>) => {
       if(!price) return;
       setter(currentData => {
+          if (currentData.length === 0) return [];
           const newData = [...currentData];
           const lastDataPoint = newData[newData.length - 1];
           const randomFactor = (Math.random() - 0.5) * 0.02; // +/- 1%
@@ -65,10 +66,6 @@ const MarketChartSection = () => {
               value: parseFloat(newValue.toFixed(2))
           };
 
-          // To keep the chart moving, we remove the oldest point and add a new one.
-          // But for this simulation, we'll just update the last point to show change
-          // and add a new one to show a trend.
-          // A more realistic approach would be a fixed window of time.
           const updatedData = [...newData.slice(1), newPoint];
           return updatedData;
       })
@@ -93,6 +90,7 @@ const MarketChartSection = () => {
 
   useEffect(() => {
     fetchPrices();
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
 
   useEffect(() => {
@@ -107,7 +105,7 @@ const MarketChartSection = () => {
 
   return (
     <section id="markets" className="py-20 md:py-32 bg-secondary animate-in fade-in-50 duration-1000">
-      <div className="container">
+      <div className="container px-4 md:px-6">
         <div className="text-center max-w-3xl mx-auto mb-12">
           <h2 className="text-3xl md:text-4xl font-bold">Live Market Overview</h2>
           <p className="mt-4 text-lg text-muted-foreground">

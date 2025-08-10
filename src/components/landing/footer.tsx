@@ -3,7 +3,7 @@ import { Bot, Twitter, Linkedin, Github } from 'lucide-react';
 const Footer = () => {
   return (
     <footer className="border-t bg-secondary">
-      <div className="container py-12">
+      <div className="container px-4 md:px-6 py-12">
         <div className="grid grid-cols-1 lg:grid-cols-12 gap-8">
           <div className="lg:col-span-4 flex flex-col items-start">
             <div className="flex items-center mb-4">

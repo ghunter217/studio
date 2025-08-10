@@ -4,7 +4,7 @@ import Image from 'next/image';
 const HeroSection = () => {
   return (
     <section className="py-20 md:py-32">
-      <div className="container grid grid-cols-1 md:grid-cols-2 gap-12 items-center">
+      <div className="container px-4 md:px-6 grid grid-cols-1 md:grid-cols-2 gap-12 items-center">
         <div className="space-y-6 text-center md:text-left">
           <h1 className="text-4xl md:text-6xl font-extrabold tracking-tighter">
             The Future of Trading is Here
