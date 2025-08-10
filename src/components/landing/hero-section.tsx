@@ -16,11 +16,14 @@ const HeroSection = () => {
             <Button size="lg">Start Your Free Trial</Button>
             <Button size="lg" variant="outline">Learn More</Button>
           </div>
+          <p className="text-sm text-muted-foreground text-center md:text-left">
+            No credit card required.
+          </p>
         </div>
         <div className="flex justify-center">
           <Image
             src="https://images.unsplash.com/photo-1611974789855-9c2a0a7236a3?q=80&w=600&h=400&auto=format&fit=crop"
-            alt="AI social media post generator dashboard"
+            alt="AI trading bot dashboard"
             width={600}
             height={400}
             className="rounded-xl shadow-2xl"
