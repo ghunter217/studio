@@ -1,5 +1,6 @@
 'use client';
 
+import { useState, useEffect } from 'react';
 import { Area, AreaChart, CartesianGrid, XAxis, YAxis } from 'recharts';
 
 import {
@@ -15,7 +16,7 @@ import {
   ChartTooltipContent,
 } from '@/components/ui/chart';
 
-const stockData = [
+const initialStockData = [
   {
     name: 'AAPL',
     data: [
@@ -54,7 +55,7 @@ const stockData = [
   },
 ];
 
-const cryptoData = [
+const initialCryptoData = [
   {
     name: 'BTC',
     data: [
@@ -82,11 +83,41 @@ const cryptoData = [
 ];
 
 const MarketChartSection = () => {
+  const [stockData, setStockData] = useState(initialStockData);
+  const [cryptoData, setCryptoData] = useState(initialCryptoData);
+
   const chartConfig = {
     value: {
       label: 'Value',
     },
   };
+
+  useEffect(() => {
+    const interval = setInterval(() => {
+      const updateData = (data: typeof initialStockData | typeof initialCryptoData) => {
+        return data.map(item => {
+          const newData = [...item.data];
+          const lastValue = newData[newData.length - 1].value;
+          const change = lastValue * (Math.random() - 0.5) * 0.05; // 5% random change
+          const newValue = parseFloat((lastValue + change).toFixed(2));
+          const newDate = new Date(newData[newData.length - 1].date);
+          newDate.setDate(newDate.getDate() + 1);
+
+          newData.shift();
+          newData.push({ date: newDate.toISOString().split('T')[0], value: newValue });
+
+          return { ...item, data: newData };
+        });
+      };
+      
+      setStockData(updateData(stockData));
+      setCryptoData(updateData(cryptoData));
+
+    }, 3000); // Update every 3 seconds
+
+    return () => clearInterval(interval);
+  }, [stockData, cryptoData]);
+
 
   return (
     <section id="markets" className="py-20 md:py-32 bg-secondary">
@@ -105,7 +136,7 @@ const MarketChartSection = () => {
                 <Card key={stock.name}>
                 <CardHeader>
                     <CardTitle>{stock.name}</CardTitle>
-                    <CardDescription>Last 6 days price trend</CardDescription>
+                    <CardDescription>Live price trend</CardDescription>
                 </CardHeader>
                 <CardContent>
                     <ChartContainer config={chartConfig} className="w-full h-[200px]">
@@ -156,7 +187,7 @@ const MarketChartSection = () => {
                 <Card key={crypto.name}>
                 <CardHeader>
                     <CardTitle>{crypto.name}</CardTitle>
-                    <CardDescription>Last 6 days price trend</CardDescription>
+                    <CardDescription>Live price trend</CardDescription>
                 </CardHeader>
                 <CardContent>
                     <ChartContainer config={chartConfig} className="w-full h-[200px]">
