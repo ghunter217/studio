@@ -19,12 +19,12 @@ const HeroSection = () => {
         </div>
         <div className="flex justify-center">
           <Image
-            src="https://images.unsplash.com/photo-1518495973542-4542c06a5843?q=80&w=600&h=400&auto=format&fit=crop"
+            src="https://images.unsplash.com/photo-1611974789855-9c2a0a7236a3?q=80&w=600&h=400&auto=format&fit=crop"
             alt="AI social media post generator dashboard"
             width={600}
             height={400}
             className="rounded-xl shadow-2xl"
-            data-ai-hint="social media"
+            data-ai-hint="crypto trading"
           />
         </div>
       </div>
