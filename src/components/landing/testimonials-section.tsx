@@ -17,14 +17,14 @@ const testimonials = [
     role: 'Day Trader',
     avatar: 'https://placehold.co/40x40.png',
     testimonial:
-      "Postflow AI has completely transformed my trading strategy. The AI is incredibly smart, and I've seen a 40% increase in my portfolio in just two months!",
+      "Postflow AI has completely transformed my trading strategy. The AI is incredibly smart, and I've seen a 40% increase in my portfolio in just two months! No credit card was required to get started.",
   },
   {
     name: 'Mark C.',
     role: 'Startup Founder',
     avatar: 'https://placehold.co/40x40.png',
     testimonial:
-      "I was skeptical about AI trading bots, but Postflow AI proved me wrong. It's easy to use, and the results speak for themselves. Highly recommended.",
+      "I was skeptical about AI trading bots, but Postflow AI proved me wrong. It's easy to use, and the results speak for themselves. The free trial was a great way to test it out.",
   },
   {
     name: 'Emily R.',
@@ -90,7 +90,7 @@ const TestimonialsSection = () => {
   );
 
   return (
-    <section id="testimonials" className="py-20 md:py-32">
+    <section id="testimonials" className="py-20 md:py-32 animate-in fade-in-50 duration-1000">
       <div className="container">
         <div className="text-center max-w-3xl mx-auto mb-12">
           <h2 className="text-3xl md:text-4xl font-bold">

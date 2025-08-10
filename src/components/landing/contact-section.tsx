@@ -4,7 +4,7 @@ import { Textarea } from "@/components/ui/textarea";
 
 const ContactSection = () => {
     return (
-        <section id="contact" className="py-20 md:py-32">
+        <section id="contact" className="py-20 md:py-32 animate-in fade-in-50 duration-1000">
             <div className="container max-w-4xl mx-auto">
                 <div className="text-center mb-12">
                     <h2 className="text-3xl md:text-4xl font-bold">Get in Touch</h2>

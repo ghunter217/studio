@@ -29,24 +29,8 @@ const MarketChartSection = () => {
   const [btcPrice, setBtcPrice] = useState<number | null>(null);
   const [ethPrice, setEthPrice] = useState<number | null>(null);
   const [isPending, startTransition] = useTransition();
-
-  const fetchPrices = () => {
-    startTransition(async () => {
-      const btcResult = await handleGetCryptoPrice('bitcoin');
-      if ('price' in btcResult) {
-        setBtcPrice(btcResult.price);
-      }
-
-      const ethResult = await handleGetCryptoPrice('ethereum');
-      if ('price' in ethResult) {
-        setEthPrice(ethResult.price);
-      }
-    });
-  };
-
-  useEffect(() => {
-    fetchPrices();
-  }, []);
+  const [btcChartData, setBtcChartData] = useState<any[]>([]);
+  const [ethChartData, setEthChartData] = useState<any[]>([]);
 
   const generateChartData = (price: number | null) => {
     if (!price) {
@@ -56,18 +40,73 @@ const MarketChartSection = () => {
         }));
     }
     const data = [];
+    let currentValue = price;
     for (let i = 5; i >= 0; i--) {
         const date = new Date();
         date.setDate(date.getDate() - i);
-        const randomFactor = (Math.random() - 0.5) * 0.1; // +/- 5%
-        const value = price * (1 - (i * 0.02)) * (1 + randomFactor);
-        data.push({ date: date.toISOString().split('T')[0], value: parseFloat(value.toFixed(2)) });
+        data.push({ date: date.toISOString().split('T')[0], value: parseFloat(currentValue.toFixed(2)) });
+        const randomFactor = (Math.random() - 0.5) * 0.05; // +/- 2.5%
+        currentValue = currentValue * (1 + randomFactor);
     }
     return data;
   }
+  
+  const updateChartData = (price: number | null, setter: React.Dispatch<React.SetStateAction<any[]>>) => {
+      if(!price) return;
+      setter(currentData => {
+          const newData = [...currentData];
+          const lastDataPoint = newData[newData.length - 1];
+          const randomFactor = (Math.random() - 0.5) * 0.02; // +/- 1%
+          const newValue = lastDataPoint.value * (1 + randomFactor);
+          
+          const newDate = new Date();
+          const newPoint = {
+              date: newDate.toISOString().split('T')[0],
+              value: parseFloat(newValue.toFixed(2))
+          };
+
+          // To keep the chart moving, we remove the oldest point and add a new one.
+          // But for this simulation, we'll just update the last point to show change
+          // and add a new one to show a trend.
+          // A more realistic approach would be a fixed window of time.
+          const updatedData = [...newData.slice(1), newPoint];
+          return updatedData;
+      })
+  }
+
+
+  const fetchPrices = () => {
+    startTransition(async () => {
+      const btcResult = await handleGetCryptoPrice('bitcoin');
+      if ('price' in btcResult) {
+        setBtcPrice(btcResult.price);
+        setBtcChartData(generateChartData(btcResult.price));
+      }
+
+      const ethResult = await handleGetCryptoPrice('ethereum');
+      if ('price' in ethResult) {
+        setEthPrice(ethResult.price);
+        setEthChartData(generateChartData(ethResult.price));
+      }
+    });
+  };
+
+  useEffect(() => {
+    fetchPrices();
+  }, []);
+
+  useEffect(() => {
+    const interval = setInterval(() => {
+        updateChartData(btcPrice, setBtcChartData);
+        updateChartData(ethPrice, setEthChartData);
+    }, 3000); // Update every 3 seconds
+
+    return () => clearInterval(interval);
+  }, [btcPrice, ethPrice]);
+
 
   return (
-    <section id="markets" className="py-20 md:py-32 bg-secondary">
+    <section id="markets" className="py-20 md:py-32 bg-secondary animate-in fade-in-50 duration-1000">
       <div className="container">
         <div className="text-center max-w-3xl mx-auto mb-12">
           <h2 className="text-3xl md:text-4xl font-bold">Live Market Overview</h2>
@@ -88,12 +127,12 @@ const MarketChartSection = () => {
                     <CardHeader>
                         <CardTitle>BTC (Bitcoin)</CardTitle>
                         <CardDescription>
-                            Current Price: {isPending ? <Skeleton className="h-6 w-24 inline-block" /> : btcPrice ? `$${btcPrice.toLocaleString()}` : 'N/A'}
+                            Current Price: {isPending && !btcPrice ? <Skeleton className="h-6 w-24 inline-block" /> : btcPrice ? `$${btcPrice.toLocaleString()}` : 'N/A'}
                         </CardDescription>
                     </CardHeader>
                     <CardContent>
                         <ChartContainer config={chartConfig} className="w-full h-[200px]">
-                            <AreaChart data={generateChartData(btcPrice)} margin={{ left: 12, right: 12 }} accessibilityLayer>
+                            <AreaChart data={btcChartData} margin={{ left: 12, right: 12 }} accessibilityLayer>
                                 <CartesianGrid vertical={false} />
                                 <XAxis dataKey="date" tickLine={false} axisLine={false} tickMargin={8} tickFormatter={(value) => new Date(value).toLocaleDateString('en-US', { month: 'short', day: 'numeric' })} />
                                 <YAxis tickLine={false} axisLine={false} tickMargin={8} domain={['dataMin - 100', 'dataMax + 100']} hide />
@@ -107,12 +146,12 @@ const MarketChartSection = () => {
                     <CardHeader>
                         <CardTitle>ETH (Ethereum)</CardTitle>
                         <CardDescription>
-                            Current Price: {isPending ? <Skeleton className="h-6 w-24 inline-block" /> : ethPrice ? `$${ethPrice.toLocaleString()}` : 'N/A'}
+                             Current Price: {isPending && !ethPrice ? <Skeleton className="h-6 w-24 inline-block" /> : ethPrice ? `$${ethPrice.toLocaleString()}` : 'N/A'}
                         </CardDescription>
                     </CardHeader>
                     <CardContent>
                         <ChartContainer config={chartConfig} className="w-full h-[200px]">
-                            <AreaChart data={generateChartData(ethPrice)} margin={{ left: 12, right: 12 }} accessibilityLayer>
+                            <AreaChart data={ethChartData} margin={{ left: 12, right: 12 }} accessibilityLayer>
                                 <CartesianGrid vertical={false} />
                                 <XAxis dataKey="date" tickLine={false} axisLine={false} tickMargin={8} tickFormatter={(value) => new Date(value).toLocaleDateString('en-US', { month: 'short', day: 'numeric' })} />
                                 <YAxis tickLine={false} axisLine={false} tickMargin={8} domain={['dataMin - 100', 'dataMax + 100']} hide />
