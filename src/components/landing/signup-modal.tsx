@@ -1,3 +1,4 @@
+
 "use client";
 
 import * as React from "react";
@@ -59,7 +60,10 @@ const SignUpModal = ({ children }: SignUpModalProps) => {
 
   const { isSubmitting } = form.formState;
 
-  async function onSubmit(values: z.infer<typeof formSchema>) {
+  async function onSubmit(values: z.infer<typeof formSchema>, event?: React.BaseSyntheticEvent) {
+    if (event) {
+      event.preventDefault();
+    }
     // Simulate API call
     await new Promise((resolve) => setTimeout(resolve, 1500));
     console.log(values);
