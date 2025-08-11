@@ -5,7 +5,7 @@ const steps = [
   {
     icon: <Rocket className="w-10 h-10 text-primary" />,
     title: '1. Connect Your Accounts',
-    description: 'Securely connect your exchange, betting, or gaming accounts. We support all major platforms.',
+    description: 'Securely connect your exchange, betting, or gaming accounts via API. We support all major platforms.',
   },
   {
     icon: <Target className="w-10 h-10 text-primary" />,
