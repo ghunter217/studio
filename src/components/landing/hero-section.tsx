@@ -1,5 +1,6 @@
 import { Button } from '@/components/ui/button';
 import Image from 'next/image';
+import SignUpModal from './signup-modal';
 
 const HeroSection = () => {
   return (
@@ -13,7 +14,9 @@ const HeroSection = () => {
             Postflow AI is an intelligent, automated bot that leverages cutting-edge AI to help you with stock trading, online betting, and poker games.
           </p>
           <div className="flex flex-col sm:flex-row gap-4 justify-center md:justify-start">
-            <Button size="lg">Start Your Free Trial</Button>
+            <SignUpModal>
+              <Button size="lg">Start Your Free Trial</Button>
+            </SignUpModal>
             <Button size="lg" variant="outline">Learn More</Button>
           </div>
           <p className="text-sm text-muted-foreground text-center md:text-left">
@@ -26,7 +29,7 @@ const HeroSection = () => {
             alt="AI trading bot dashboard"
             width={600}
             height={400}
-            className="rounded-xl shadow-2xl"
+            className="rounded-xl shadow-2xl hover:shadow-primary/50 transition-shadow duration-300 transform hover:-translate-y-2"
             data-ai-hint="crypto trading"
           />
         </div>

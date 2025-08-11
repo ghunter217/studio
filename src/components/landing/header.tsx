@@ -3,6 +3,7 @@
 import { Button } from '@/components/ui/button';
 import { Bot } from 'lucide-react';
 import Link from 'next/link';
+import SignUpModal from './signup-modal';
 
 const Header = () => {
   return (
@@ -13,7 +14,9 @@ const Header = () => {
           <span className="font-bold">Postflow AI</span>
         </div>
         <nav className="hidden md:flex items-center space-x-2 text-sm font-medium ml-auto">
-          <Button>Get Started</Button>
+          <SignUpModal>
+            <Button>Get Started</Button>
+          </SignUpModal>
           <Button variant="ghost" asChild>
             <Link href="#features">
               Features
