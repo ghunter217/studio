@@ -14,8 +14,15 @@ const ChatWidget = () => {
     return (
         <div className="fixed bottom-8 right-8 z-50">
             {isOpen && <ChatPopup onClose={toggleChat} />}
-            <Button size="icon" className="w-14 h-14 rounded-full shadow-lg" onClick={toggleChat}>
-                {isOpen ? <X className="w-7 h-7" /> : <MessageSquare className="w-7 h-7" />}
+            <Button 
+                size="icon" 
+                className="w-16 h-16 rounded-full shadow-lg bg-primary hover:bg-primary/90 transition-all duration-300 transform hover:scale-110 active:scale-95" 
+                onClick={toggleChat}
+                style={{
+                    boxShadow: '0 4px 14px 0 rgba(0, 118, 255, 0.39)',
+                }}
+            >
+                {isOpen ? <X className="w-8 h-8" /> : <MessageSquare className="w-8 h-8" />}
                 <span className="sr-only">{isOpen ? 'Close Chat' : 'Open Chat'}</span>
             </Button>
         </div>

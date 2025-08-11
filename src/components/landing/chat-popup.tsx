@@ -25,10 +25,13 @@ const ChatPopup = ({ onClose }: ChatPopupProps) => {
 
   const scrollToBottom = () => {
     if (scrollAreaRef.current) {
-        scrollAreaRef.current.scrollTo({
-            top: scrollAreaRef.current.scrollHeight,
-            behavior: 'smooth'
-        });
+        const viewport = scrollAreaRef.current.querySelector('div[data-radix-scroll-area-viewport]');
+        if (viewport) {
+          viewport.scrollTo({
+              top: viewport.scrollHeight,
+              behavior: 'smooth'
+          });
+        }
     }
   };
 
@@ -67,8 +70,8 @@ const ChatPopup = ({ onClose }: ChatPopupProps) => {
                     {messages.map((message, index) => (
                         <div key={index} className={`flex items-start gap-3 ${message.role === 'user' ? 'justify-end' : ''}`}>
                             {message.role === 'model' && <Bot className="w-6 h-6 shrink-0" />}
-                            <div className={`p-3 rounded-lg ${message.role === 'user' ? 'bg-primary text-primary-foreground' : 'bg-secondary'}`}>
-                                <p className="text-sm">{message.content}</p>
+                            <div className={`p-3 rounded-lg max-w-[90%] ${message.role === 'user' ? 'bg-primary text-primary-foreground' : 'bg-secondary'}`}>
+                                <p className="text-sm break-words">{message.content}</p>
                             </div>
                         </div>
                     ))}
