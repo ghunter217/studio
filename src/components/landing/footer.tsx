@@ -1,4 +1,4 @@
-import { Bot, Twitter, Linkedin, Github } from 'lucide-react';
+import { Bot, Twitter, Linkedin, Github, ShieldCheck, BadgeCheck } from 'lucide-react';
 
 const Footer = () => {
   return (
@@ -54,10 +54,20 @@ const Footer = () => {
           <p className="text-sm text-muted-foreground">
             &copy; {new Date().getFullYear()} Postflow AI. All rights reserved.
           </p>
-          <div className="flex space-x-4 mt-4 sm:mt-0">
-            <a href="#" className="text-muted-foreground hover:text-primary transition-colors"><Twitter className="h-5 w-5" /></a>
-            <a href="#" className="text-muted-foreground hover:text-primary transition-colors"><Linkedin className="h-5 w-5" /></a>
-            <a href="#" className="text-muted-foreground hover:text-primary transition-colors"><Github className="h-5 w-5" /></a>
+          <div className="flex items-center gap-6 mt-4 sm:mt-0">
+            <div className="flex items-center gap-2 text-sm text-muted-foreground">
+              <BadgeCheck className="w-5 h-5 text-green-500" />
+              <span>Verified Secure</span>
+            </div>
+            <div className="flex items-center gap-2 text-sm text-muted-foreground">
+              <ShieldCheck className="w-5 h-5 text-primary" />
+              <span>Data Insured</span>
+            </div>
+            <div className="flex space-x-4">
+              <a href="#" className="text-muted-foreground hover:text-primary transition-colors"><Twitter className="h-5 w-5" /></a>
+              <a href="#" className="text-muted-foreground hover:text-primary transition-colors"><Linkedin className="h-5 w-5" /></a>
+              <a href="#" className="text-muted-foreground hover:text-primary transition-colors"><Github className="h-5 w-5" /></a>
+            </div>
           </div>
         </div>
       </div>
