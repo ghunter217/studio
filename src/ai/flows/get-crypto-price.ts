@@ -30,8 +30,8 @@ const getCryptoPriceTool = ai.defineTool(
     async (input) => {
         const id = input.ticker.toLowerCase();
         const apiKey = process.env.COINGECKO_API_KEY;
-        const baseUrl = apiKey ? 'https://pro-api.coingecko.com/api/v3' : 'https://api.coingecko.com/api/v3';
-        const apiKeyQuery = apiKey ? `&x_cg_pro_api_key=${apiKey}` : '';
+        const baseUrl = apiKey && apiKey !== 'your_coingecko_api_key_here' ? 'https://pro-api.coingecko.com/api/v3' : 'https://api.coingecko.com/api/v3';
+        const apiKeyQuery = apiKey && apiKey !== 'your_coingecko_api_key_here' ? `&x_cg_pro_api_key=${apiKey}` : '';
 
         const priceResponse = await fetch(`${baseUrl}/simple/price?ids=${id}&vs_currencies=usd${apiKeyQuery}`);
         const priceData: any = await priceResponse.json();
