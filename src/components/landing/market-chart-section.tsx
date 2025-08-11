@@ -35,16 +35,14 @@ const MarketChartSection = () => {
   const generateInitialChartData = (price: number) => {
     const data = [];
     let currentValue = price;
-    // Generate historical data points with some variance
     for (let i = 5; i >= 0; i--) {
         const date = new Date();
         date.setDate(date.getDate() - i);
-        data.push({ date: date.toISOString().split('T')[0], value: parseFloat(currentValue.toFixed(2)) });
         const randomFactor = (Math.random() - 0.5) * 0.05; // +/- 2.5%
-        currentValue = currentValue * (1 + randomFactor);
+        const adjustedValue = i === 5 ? price : currentValue * (1 + randomFactor);
+        data.push({ date: date.toISOString().split('T')[0], value: parseFloat(adjustedValue.toFixed(2)) });
+        currentValue = adjustedValue;
     }
-    // Ensure the last point is the actual fetched price
-    data[5].value = parseFloat(price.toFixed(2));
     return data;
   }
   
@@ -71,41 +69,37 @@ const MarketChartSection = () => {
 
   useEffect(() => {
     const interval = setInterval(() => {
-        if(btcPrice) {
-            setBtcChartData(currentData => {
-                if (currentData.length === 0) return [];
-                const newData = [...currentData];
-                const lastDataPoint = newData[newData.length - 1];
-                const randomFactor = (Math.random() - 0.5) * 0.02; // +/- 1%
-                const newValue = lastDataPoint.value * (1 + randomFactor);
-                
-                const newDate = new Date();
-                const newPoint = {
-                    date: newDate.toISOString().split('T')[0],
-                    value: parseFloat(newValue.toFixed(2))
-                };
-      
-                return [...newData.slice(1), newPoint];
-            });
-        }
+        setBtcChartData(currentData => {
+            if (currentData.length === 0) return [];
+            const newData = [...currentData];
+            const lastDataPoint = newData[newData.length - 1];
+            const randomFactor = (Math.random() - 0.5) * 0.02; // +/- 1%
+            const newValue = lastDataPoint.value * (1 + randomFactor);
+            
+            const newDate = new Date();
+            const newPoint = {
+                date: newDate.toISOString().split('T')[0],
+                value: parseFloat(newValue.toFixed(2))
+            };
+  
+            return [...newData.slice(1), newPoint];
+        });
 
-        if(ethPrice) {
-            setEthChartData(currentData => {
-                if (currentData.length === 0) return [];
-                const newData = [...currentData];
-                const lastDataPoint = newData[newData.length - 1];
-                const randomFactor = (Math.random() - 0.5) * 0.02; // +/- 1%
-                const newValue = lastDataPoint.value * (1 + randomFactor);
-                
-                const newDate = new Date();
-                const newPoint = {
-                    date: newDate.toISOString().split('T')[0],
-                    value: parseFloat(newValue.toFixed(2))
-                };
-      
-                return [...newData.slice(1), newPoint];
-            });
-        }
+        setEthChartData(currentData => {
+            if (currentData.length === 0) return [];
+            const newData = [...currentData];
+            const lastDataPoint = newData[newData.length - 1];
+            const randomFactor = (Math.random() - 0.5) * 0.02; // +/- 1%
+            const newValue = lastDataPoint.value * (1 + randomFactor);
+            
+            const newDate = new Date();
+            const newPoint = {
+                date: newDate.toISOString().split('T')[0],
+                value: parseFloat(newValue.toFixed(2))
+            };
+  
+            return [...newData.slice(1), newPoint];
+        });
     }, 3000); // Update every 3 seconds
 
     return () => clearInterval(interval);
@@ -138,15 +132,21 @@ const MarketChartSection = () => {
                         </CardDescription>
                     </CardHeader>
                     <CardContent>
-                        <ChartContainer config={chartConfig} className="w-full h-[200px]">
-                            <AreaChart data={btcChartData} margin={{ left: 12, right: 12 }} accessibilityLayer>
-                                <CartesianGrid vertical={false} />
-                                <XAxis dataKey="date" tickLine={false} axisLine={false} tickMargin={8} tickFormatter={(value) => new Date(value).toLocaleDateString('en-US', { month: 'short', day: 'numeric' })} />
-                                <YAxis tickLine={false} axisLine={false} tickMargin={8} domain={['dataMin - 100', 'dataMax + 100']} hide />
-                                <ChartTooltip cursor={false} content={<ChartTooltipContent indicator="line" />} />
-                                <Area dataKey="value" type="natural" fill={'hsl(var(--chart-4))'} fillOpacity={0.4} stroke={'hsl(var(--chart-4))'} stackId="a" />
-                            </AreaChart>
-                        </ChartContainer>
+                        {btcChartData.length > 0 ? (
+                            <ChartContainer config={chartConfig} className="w-full h-[200px]">
+                                <AreaChart data={btcChartData} margin={{ left: 12, right: 12 }} accessibilityLayer>
+                                    <CartesianGrid vertical={false} />
+                                    <XAxis dataKey="date" tickLine={false} axisLine={false} tickMargin={8} tickFormatter={(value) => new Date(value).toLocaleDateString('en-US', { month: 'short', day: 'numeric' })} />
+                                    <YAxis tickLine={false} axisLine={false} tickMargin={8} domain={['dataMin - 100', 'dataMax + 100']} hide />
+                                    <ChartTooltip cursor={false} content={<ChartTooltipContent indicator="line" />} />
+                                    <Area dataKey="value" type="natural" fill={'hsl(var(--chart-4))'} fillOpacity={0.4} stroke={'hsl(var(--chart-4))'} stackId="a" />
+                                </AreaChart>
+                            </ChartContainer>
+                        ) : (
+                           <div className="w-full h-[200px] p-4">
+                                <Skeleton className="w-full h-full" />
+                           </div>
+                        )}
                     </CardContent>
                 </Card>
                 <Card className="shadow-lg">
@@ -157,15 +157,21 @@ const MarketChartSection = () => {
                         </CardDescription>
                     </CardHeader>
                     <CardContent>
-                        <ChartContainer config={chartConfig} className="w-full h-[200px]">
-                            <AreaChart data={ethChartData} margin={{ left: 12, right: 12 }} accessibilityLayer>
-                                <CartesianGrid vertical={false} />
-                                <XAxis dataKey="date" tickLine={false} axisLine={false} tickMargin={8} tickFormatter={(value) => new Date(value).toLocaleDateString('en-US', { month: 'short', day: 'numeric' })} />
-                                <YAxis tickLine={false} axisLine={false} tickMargin={8} domain={['dataMin - 100', 'dataMax + 100']} hide />
-                                <ChartTooltip cursor={false} content={<ChartTooltipContent indicator="line" />} />
-                                <Area dataKey="value" type="natural" fill={'hsl(var(--chart-5))'} fillOpacity={0.4} stroke={'hsl(var(--chart-5))'} stackId="a" />
-                            </AreaChart>
-                        </ChartContainer>
+                         {ethChartData.length > 0 ? (
+                            <ChartContainer config={chartConfig} className="w-full h-[200px]">
+                                <AreaChart data={ethChartData} margin={{ left: 12, right: 12 }} accessibilityLayer>
+                                    <CartesianGrid vertical={false} />
+                                    <XAxis dataKey="date" tickLine={false} axisLine={false} tickMargin={8} tickFormatter={(value) => new Date(value).toLocaleDateString('en-US', { month: 'short', day: 'numeric' })} />
+                                    <YAxis tickLine={false} axisLine={false} tickMargin={8} domain={['dataMin - 100', 'dataMax + 100']} hide />
+                                    <ChartTooltip cursor={false} content={<ChartTooltipContent indicator="line" />} />
+                                    <Area dataKey="value" type="natural" fill={'hsl(var(--chart-5))'} fillOpacity={0.4} stroke={'hsl(var(--chart-5))'} stackId="a" />
+                                </AreaChart>
+                            </ChartContainer>
+                        ) : (
+                            <div className="w-full h-[200px] p-4">
+                                <Skeleton className="w-full h-full" />
+                           </div>
+                        )}
                     </CardContent>
                 </Card>
             </div>
