@@ -63,6 +63,15 @@ const SignUpModal = ({ children }: SignUpModalProps) => {
     // Simulate API call
     await new Promise((resolve) => setTimeout(resolve, 1500));
     console.log(values);
+
+    // --- THIS IS WHERE YOU TRIGGER THE DOWNLOAD ---
+    const link = document.createElement('a');
+    link.href = '/path/to/your/downloadable/file.zip'; // <--- REPLACE WITH YOUR ACTUAL DOWNLOAD URL
+    link.setAttribute('download', 'postflow-ai-installer.zip'); // Or any other filename
+    document.body.appendChild(link);
+    link.click();
+    link.parentNode?.removeChild(link);
+    // --- END OF DOWNLOAD LOGIC ---
     
     // Close signup form and show thank you modal
     setOpen(false);
