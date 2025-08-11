@@ -70,7 +70,10 @@ const SignUpModal = ({ children }: SignUpModalProps) => {
 
     // --- THIS IS WHERE YOU TRIGGER THE DOWNLOAD ---
     const link = document.createElement('a');
-    link.href = '/path/to/your/downloadable/file.zip'; // <--- REPLACE WITH YOUR ACTUAL DOWNLOAD URL
+    // V V V V V V V V V V V V V V V V V V V V V V V V V V V V V V
+    // REPLACE THE LINE BELOW WITH THE ACTUAL URL OF YOUR FILE
+    link.href = 'https://your-website.com/path/to/your/file.zip';
+    // ^ ^ ^ ^ ^ ^ ^ ^ ^ ^ ^ ^ ^ ^ ^ ^ ^ ^ ^ ^ ^ ^ ^ ^ ^ ^ ^ ^ ^ ^
     link.setAttribute('download', 'postflow-ai-installer.zip'); // Or any other filename
     document.body.appendChild(link);
     link.click();
