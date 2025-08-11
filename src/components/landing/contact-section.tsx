@@ -1,6 +1,6 @@
 'use client';
 
-import { useActionState, useEffect, useRef } from 'react';
+import { useActionState, useEffect, useRef, useState } from 'react';
 import { useFormStatus } from 'react-dom';
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
@@ -29,6 +29,7 @@ const ContactSection = () => {
     const [state, formAction] = useActionState(handleContactForm, initialState);
     const { toast } = useToast();
     const formRef = useRef<HTMLFormElement>(null);
+    const [isDialogOpen, setIsDialogOpen] = useState(false);
 
     useEffect(() => {
         if (state.message && !state.isSuccess) {
@@ -40,8 +41,19 @@ const ContactSection = () => {
         }
         if (state.isSuccess) {
             formRef.current?.reset();
+            setIsDialogOpen(true);
         }
     }, [state, toast]);
+    
+    useEffect(() => {
+        // Reset the form action state when the dialog is closed
+        if (!isDialogOpen && state.isSuccess) {
+           // A bit of a hack to reset the action state, as there's no built-in reset function.
+           // We can dispatch with null form data which will fail validation and reset the success state.
+           formAction(new FormData());
+        }
+    }, [isDialogOpen, state.isSuccess, formAction]);
+
 
     return (
         <section id="contact" className="py-20 md:py-32 animate-in fade-in-50 duration-1000">
@@ -54,16 +66,16 @@ const ContactSection = () => {
                 </div>
                 <form ref={formRef} action={formAction} className="max-w-xl mx-auto space-y-4">
                     <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
-                        <Input name="name" type="text" placeholder="Name" className="text-base" />
-                        <Input name="email" type="email" placeholder="Email" className="text-base" />
+                        <Input name="name" type="text" placeholder="Name" className="text-base" required />
+                        <Input name="email" type="email" placeholder="Email" className="text-base" required />
                     </div>
-                    <Textarea name="message" placeholder="Your message..." rows={5} className="text-base" />
+                    <Textarea name="message" placeholder="Your message..." rows={5} className="text-base" required />
                     <div className="text-center">
                         <SubmitButton />
                     </div>
                 </form>
             </div>
-            <Dialog open={state.isSuccess}>
+            <Dialog open={isDialogOpen} onOpenChange={setIsDialogOpen}>
                 <DialogContent className="sm:max-w-lg bg-secondary border-primary shadow-2xl rounded-xl text-center">
                     <DialogHeader>
                         <div className="flex justify-center mb-4">

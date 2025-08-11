@@ -82,6 +82,14 @@ export async function handleContactForm(
   prevState: ContactFormState,
   formData: FormData
 ): Promise<ContactFormState> {
+  // This is a hack to reset the state from the client.
+  if (!formData.get('name')) {
+    return {
+        message: '',
+        isSuccess: false,
+    }
+  }
+
   const validatedFields = ContactSchema.safeParse({
     name: formData.get('name'),
     email: formData.get('email'),
