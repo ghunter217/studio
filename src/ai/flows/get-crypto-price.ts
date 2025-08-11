@@ -30,13 +30,20 @@ const getCryptoPriceTool = ai.defineTool(
     async (input) => {
         const id = input.ticker.toLowerCase();
         const apiKey = process.env.COINGECKO_API_KEY;
-        const baseUrl = apiKey && apiKey !== 'your_coingecko_api_key_here' ? 'https://pro-api.coingecko.com/api/v3' : 'https://api.coingecko.com/api/v3';
-        const apiKeyQuery = apiKey && apiKey !== 'your_coingecko_api_key_here' ? `&x_cg_pro_api_key=${apiKey}` : '';
-
-        const priceResponse = await fetch(`${baseUrl}/simple/price?ids=${id}&vs_currencies=usd${apiKeyQuery}`);
-        const priceData: any = await priceResponse.json();
+        const useProApi = apiKey && apiKey !== 'your_coingecko_api_key_here';
         
-        const chartResponse = await fetch(`${baseUrl}/coins/${id}/market_chart?vs_currency=usd&days=7&interval=daily${apiKeyQuery}`);
+        const baseUrl = useProApi ? 'https://pro-api.coingecko.com/api/v3' : 'https://api.coingecko.com/api/v3';
+        const apiKeyParam = useProApi ? `x_cg_pro_api_key=${apiKey}` : '';
+
+        const priceUrl = `${baseUrl}/simple/price?ids=${id}&vs_currencies=usd&${apiKeyParam}`;
+        const chartUrl = `${baseUrl}/coins/${id}/market_chart?vs_currency=usd&days=7&interval=daily&${apiKeyParam}`;
+
+        const [priceResponse, chartResponse] = await Promise.all([
+            fetch(priceUrl),
+            fetch(chartUrl)
+        ]);
+        
+        const priceData: any = await priceResponse.json();
         const chartData: any = await chartResponse.json();
 
         if (priceData[id] && priceData[id].usd && chartData.prices) {
