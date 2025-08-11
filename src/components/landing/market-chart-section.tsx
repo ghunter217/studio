@@ -18,7 +18,7 @@ import {
 import { Button } from '@/components/ui/button';
 import { handleGetCryptoPrice } from '@/app/actions';
 import { Skeleton } from '../ui/skeleton';
-import type { CryptoPriceOutput } from '@/ai/schemas/get-crypto-price';
+import type { CryptoPriceOutput } from '@/services/coingecko';
 
 const chartConfig = {
     value: {

@@ -1,12 +1,12 @@
 'use server';
 
-import { getCryptoPrice } from '@/ai/flows/get-crypto-price';
-import { CryptoPriceInput, CryptoPriceOutput } from '@/ai/schemas/get-crypto-price';
+import { getCryptoPriceData } from '@/services/coingecko';
+import type { CryptoPriceOutput } from '@/services/coingecko';
 import { z } from 'zod';
 
 export async function handleGetCryptoPrice(ticker: string): Promise<CryptoPriceOutput | { error: string }> {
   try {
-    const result = await getCryptoPrice({ ticker });
+    const result = await getCryptoPriceData(ticker);
     return result;
   } catch (error: any) {
     console.error(`Error fetching price for ${ticker}:`, error);
