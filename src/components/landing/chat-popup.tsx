@@ -71,7 +71,7 @@ const ChatPopup = ({ onClose }: ChatPopupProps) => {
                         <div key={index} className={`flex items-start gap-3 ${message.role === 'user' ? 'justify-end' : ''}`}>
                             {message.role === 'model' && <Bot className="w-6 h-6 shrink-0" />}
                             <div className={`p-3 rounded-lg max-w-[90%] ${message.role === 'user' ? 'bg-primary text-primary-foreground' : 'bg-secondary'}`}>
-                                <p className="text-sm whitespace-pre-wrap break-words">{message.content}</p>
+                                <p className="text-sm whitespace-pre-wrap break-all">{message.content}</p>
                             </div>
                         </div>
                     ))}
