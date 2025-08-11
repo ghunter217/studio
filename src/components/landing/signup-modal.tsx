@@ -12,6 +12,8 @@ import {
   DialogHeader,
   DialogTitle,
   DialogTrigger,
+  DialogFooter,
+  DialogClose,
 } from "@/components/ui/dialog";
 import {
   Form,
@@ -22,7 +24,7 @@ import {
   FormMessage,
 } from "@/components/ui/form";
 import { Input } from "@/components/ui/input";
-import { Download, Loader2 } from "lucide-react";
+import { Download, Loader2, CheckCircle } from "lucide-react";
 import { useToast } from "@/hooks/use-toast";
 
 interface SignUpModalProps {
@@ -43,6 +45,7 @@ const formSchema = z.object({
 
 const SignUpModal = ({ children }: SignUpModalProps) => {
   const [open, setOpen] = React.useState(false);
+  const [showThankYou, setShowThankYou] = React.useState(false);
   const { toast } = useToast();
 
   const form = useForm<z.infer<typeof formSchema>>({
@@ -60,88 +63,112 @@ const SignUpModal = ({ children }: SignUpModalProps) => {
     // Simulate API call
     await new Promise((resolve) => setTimeout(resolve, 1500));
     console.log(values);
-    toast({
-        title: "Account Created!",
-        description: "Your download will start shortly.",
-    });
+    
+    // Close signup form and show thank you modal
     setOpen(false);
+    setShowThankYou(true);
     form.reset();
   }
 
   return (
-    <Dialog open={open} onOpenChange={setOpen}>
-      <DialogTrigger asChild>{children}</DialogTrigger>
-      <DialogContent className="sm:max-w-md bg-secondary border-primary shadow-2xl rounded-xl">
-        <DialogHeader>
-          <DialogTitle className="text-2xl font-bold text-center text-primary">
-            Get Started Now
-          </DialogTitle>
-          <DialogDescription className="text-center text-muted-foreground">
-            Create your account to start your free trial.
-          </DialogDescription>
-        </DialogHeader>
-        <Form {...form}>
-          <form onSubmit={form.handleSubmit(onSubmit)} className="space-y-6">
-            <FormField
-              control={form.control}
-              name="name"
-              render={({ field }) => (
-                <FormItem>
-                  <FormLabel>Name</FormLabel>
-                  <FormControl>
-                    <Input placeholder="John Doe" {...field} />
-                  </FormControl>
-                  <FormMessage />
-                </FormItem>
-              )}
-            />
-            <FormField
-              control={form.control}
-              name="email"
-              render={({ field }) => (
-                <FormItem>
-                  <FormLabel>Email</FormLabel>
-                  <FormControl>
-                    <Input
-                      type="email"
-                      placeholder="john.doe@example.com"
-                      {...field}
-                    />
-                  </FormControl>
-                  <FormMessage />
-                </FormItem>
-              )}
-            />
-            <FormField
-              control={form.control}
-              name="password"
-              render={({ field }) => (
-                <FormItem>
-                  <FormLabel>Password</FormLabel>
-                  <FormControl>
-                    <Input type="password" placeholder="••••••••" {...field} />
-                  </FormControl>
-                  <FormMessage />
-                </FormItem>
-              )}
-            />
-            <Button
-              type="submit"
-              size="lg"
-              className="w-full shadow-lg hover:shadow-primary/50 transform hover:-translate-y-1 transition-all duration-300"
-              disabled={isSubmitting}
-            >
-              {isSubmitting ? (
-                <Loader2 className="mr-2 h-5 w-5 animate-spin" />
-              ) : (
-                <Download className="mr-2 h-5 w-5" />
-              )}
-              {isSubmitting ? "Creating Account..." : "Download & Start Trial"}
-            </Button>
-          </form>
-        </Form>
-      </DialogContent>
-    </Dialog>
+    <>
+      <Dialog open={open} onOpenChange={setOpen}>
+        <DialogTrigger asChild>{children}</DialogTrigger>
+        <DialogContent className="sm:max-w-md bg-secondary border-primary shadow-2xl rounded-xl">
+          <DialogHeader>
+            <DialogTitle className="text-2xl font-bold text-center text-primary">
+              Get Started Now
+            </DialogTitle>
+            <DialogDescription className="text-center text-muted-foreground">
+              Create your account to start your free trial.
+            </DialogDescription>
+          </DialogHeader>
+          <Form {...form}>
+            <form onSubmit={form.handleSubmit(onSubmit)} className="space-y-6">
+              <FormField
+                control={form.control}
+                name="name"
+                render={({ field }) => (
+                  <FormItem>
+                    <FormLabel>Name</FormLabel>
+                    <FormControl>
+                      <Input placeholder="John Doe" {...field} />
+                    </FormControl>
+                    <FormMessage />
+                  </FormItem>
+                )}
+              />
+              <FormField
+                control={form.control}
+                name="email"
+                render={({ field }) => (
+                  <FormItem>
+                    <FormLabel>Email</FormLabel>
+                    <FormControl>
+                      <Input
+                        type="email"
+                        placeholder="john.doe@example.com"
+                        {...field}
+                      />
+                    </FormControl>
+                    <FormMessage />
+                  </FormItem>
+                )}
+              />
+              <FormField
+                control={form.control}
+                name="password"
+                render={({ field }) => (
+                  <FormItem>
+                    <FormLabel>Password</FormLabel>
+                    <FormControl>
+                      <Input type="password" placeholder="••••••••" {...field} />
+                    </FormControl>
+                    <FormMessage />
+                  </FormItem>
+                )}
+              />
+              <Button
+                type="submit"
+                size="lg"
+                className="w-full shadow-lg hover:shadow-primary/50 transform hover:-translate-y-1 transition-all duration-300"
+                disabled={isSubmitting}
+              >
+                {isSubmitting ? (
+                  <Loader2 className="mr-2 h-5 w-5 animate-spin" />
+                ) : (
+                  <Download className="mr-2 h-5 w-5" />
+                )}
+                {isSubmitting ? "Creating Account..." : "Download & Start Trial"}
+              </Button>
+            </form>
+          </Form>
+        </DialogContent>
+      </Dialog>
+      
+      <Dialog open={showThankYou} onOpenChange={setShowThankYou}>
+        <DialogContent className="sm:max-w-md bg-secondary border-primary shadow-2xl rounded-xl text-center">
+            <DialogHeader>
+                <div className="flex justify-center mb-4">
+                    <CheckCircle className="w-16 h-16 text-green-500" />
+                </div>
+                <DialogTitle className="text-2xl font-bold text-center text-primary">
+                    Thank You!
+                </DialogTitle>
+                <DialogDescription className="text-center text-muted-foreground mt-2">
+                    Your account has been created successfully. Your download will begin shortly. Welcome aboard!
+                </DialogDescription>
+            </DialogHeader>
+            <DialogFooter className="sm:justify-center">
+                <DialogClose asChild>
+                    <Button type="button" variant="outline" onClick={() => setShowThankYou(false)}>
+                        Close
+                    </Button>
+                </DialogClose>
+            </DialogFooter>
+        </DialogContent>
+      </Dialog>
+    </>
   );
 };
 
