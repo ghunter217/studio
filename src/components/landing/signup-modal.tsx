@@ -147,21 +147,21 @@ const SignUpModal = ({ children }: SignUpModalProps) => {
       </Dialog>
       
       <Dialog open={showThankYou} onOpenChange={setShowThankYou}>
-        <DialogContent className="sm:max-w-md bg-secondary border-primary shadow-2xl rounded-xl text-center">
+        <DialogContent className="sm:max-w-lg bg-secondary border-primary shadow-2xl rounded-xl text-center">
             <DialogHeader>
                 <div className="flex justify-center mb-4">
-                    <CheckCircle className="w-16 h-16 text-green-500" />
+                    <CheckCircle className="w-20 h-20 text-green-500 animate-in fade-in-25 zoom-in-50 duration-500" />
                 </div>
-                <DialogTitle className="text-2xl font-bold text-center text-primary">
+                <DialogTitle className="text-3xl font-bold text-center text-primary">
                     Thank You!
                 </DialogTitle>
-                <DialogDescription className="text-center text-muted-foreground mt-2">
+                <DialogDescription className="text-center text-muted-foreground mt-2 text-lg">
                     Your account has been created successfully. Your download will begin shortly. Welcome aboard!
                 </DialogDescription>
             </DialogHeader>
-            <DialogFooter className="sm:justify-center">
+            <DialogFooter className="sm:justify-center mt-4">
                 <DialogClose asChild>
-                    <Button type="button" variant="outline" onClick={() => setShowThankYou(false)}>
+                    <Button type="button" size="lg" variant="outline" onClick={() => setShowThankYou(false)}>
                         Close
                     </Button>
                 </DialogClose>
