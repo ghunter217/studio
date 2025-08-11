@@ -1,3 +1,4 @@
+'use server';
 import fetch from 'node-fetch';
 
 export interface CryptoPriceOutput {
@@ -18,7 +19,7 @@ export async function getCryptoPriceData(ticker: string): Promise<CryptoPriceOut
 
     const chartUrl = `${baseUrl}/coins/${id}/market_chart?vs_currency=usd&days=7&interval=daily&${apiKeyParam}`;
 
-    const chartResponse = await fetch(chartUrl);
+    const chartResponse = await fetch(chartUrl, { cache: 'no-store' });
     
     if (!chartResponse.ok) {
         const errorBody = await chartResponse.text();
