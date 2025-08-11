@@ -38,6 +38,11 @@ const Header = () => {
             </Link>
           </Button>
           <Button variant="ghost" asChild>
+            <Link href="#faq">
+              FAQ
+            </Link>
+          </Button>
+          <Button variant="ghost" asChild>
             <Link href="#contact">
               Contact
             </Link>
