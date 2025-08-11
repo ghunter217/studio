@@ -19,8 +19,7 @@ const ChatWidget = () => {
                 className="w-16 h-16 rounded-full shadow-lg bg-primary hover:bg-primary/90 transition-all duration-300 transform hover:scale-110 active:scale-95" 
                 onClick={toggleChat}
                 style={{
-                    boxShadow: '0 4px 14px 0 hsla(var(--primary), 0.4), 0 0 0 2px hsl(var(--primary-foreground))',
-                    border: '2px solid hsl(var(--primary))'
+                    boxShadow: '0 4px 14px 0 hsla(var(--primary), 0.5), 0 0 0 2px hsl(var(--background)), 0 0 0 4px hsl(var(--primary))',
                 }}
             >
                 {isOpen ? <X className="w-8 h-8" /> : <MessageSquare className="w-8 h-8" />}
