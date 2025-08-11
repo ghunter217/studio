@@ -1,3 +1,4 @@
+
 'use client';
 
 import * as React from 'react';
@@ -116,7 +117,7 @@ const TestimonialsSection = () => {
                   className="pl-4 md:basis-1/2 lg:basis-1/3"
                 >
                   <div className="p-1 h-full">
-                    <Card className="p-6 h-full shadow-lg">
+                    <Card className="p-6 h-full shadow-lg hover:shadow-primary/20 hover:scale-105 transition-all duration-300">
                       <CardContent className="p-0 flex flex-col h-full">
                         <p className="text-muted-foreground italic flex-grow">
                           "{testimonial.testimonial}"
