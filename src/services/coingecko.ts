@@ -16,31 +16,27 @@ export async function getCryptoPriceData(ticker: string): Promise<CryptoPriceOut
     const baseUrl = useProApi ? 'https://pro-api.coingecko.com/api/v3' : 'https://api.coingecko.com/api/v3';
     const apiKeyParam = useProApi ? `x_cg_pro_api_key=${apiKey}` : '';
 
-    const priceUrl = `${baseUrl}/simple/price?ids=${id}&vs_currencies=usd&${apiKeyParam}`;
     const chartUrl = `${baseUrl}/coins/${id}/market_chart?vs_currency=usd&days=7&interval=daily&${apiKeyParam}`;
 
-    const [priceResponse, chartResponse] = await Promise.all([
-        fetch(priceUrl),
-        fetch(chartUrl)
-    ]);
+    const chartResponse = await fetch(chartUrl);
     
-    if (!priceResponse.ok) {
-        throw new Error(`Failed to fetch price data for ${ticker}: ${priceResponse.statusText}`);
-    }
     if (!chartResponse.ok) {
+        const errorBody = await chartResponse.text();
+        console.error(`Failed to fetch chart data for ${ticker}: ${chartResponse.statusText}`, errorBody);
         throw new Error(`Failed to fetch chart data for ${ticker}: ${chartResponse.statusText}`);
     }
 
-    const priceData: any = await priceResponse.json();
     const chartData: any = await chartResponse.json();
 
-    if (priceData[id] && priceData[id].usd && chartData.prices) {
+    if (chartData.prices && chartData.prices.length > 0) {
+        const formattedChartData = chartData.prices.map((p: [number, number]) => ({
+            date: new Date(p[0]).toISOString().split('T')[0],
+            value: parseFloat(p[1].toFixed(2)),
+        }));
+
         return {
-            price: priceData[id].usd,
-            chartData: chartData.prices.map((p: [number, number]) => ({
-                date: new Date(p[0]).toISOString().split('T')[0],
-                value: parseFloat(p[1].toFixed(2)),
-            })),
+            price: formattedChartData[formattedChartData.length - 1].value,
+            chartData: formattedChartData,
         };
     }
     
