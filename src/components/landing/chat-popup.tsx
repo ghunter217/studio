@@ -25,7 +25,7 @@ const ChatPopup = ({ onClose }: ChatPopupProps) => {
 
   const scrollToBottom = () => {
     if (scrollAreaRef.current) {
-        const viewport = scrollArea_ref.current.querySelector('div[data-radix-scroll-area-viewport]');
+        const viewport = scrollAreaRef.current.querySelector('div[data-radix-scroll-area-viewport]');
         if (viewport) {
           viewport.scrollTo({
               top: viewport.scrollHeight,
