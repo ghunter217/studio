@@ -18,6 +18,7 @@ import {
 import { Button } from '@/components/ui/button';
 import { handleGetCryptoPrice } from '@/app/actions';
 import { Skeleton } from '../ui/skeleton';
+import type { CryptoPriceOutput } from '@/ai/schemas/get-crypto-price';
 
 const chartConfig = {
     value: {
@@ -26,39 +27,27 @@ const chartConfig = {
 };
 
 const MarketChartSection = () => {
-  const [btcPrice, setBtcPrice] = useState<number | null>(null);
-  const [ethPrice, setEthPrice] = useState<number | null>(null);
+  const [btcData, setBtcData] = useState<CryptoPriceOutput | null>(null);
+  const [ethData, setEthData] = useState<CryptoPriceOutput | null>(null);
   const [isPending, startTransition] = useTransition();
-  const [btcChartData, setBtcChartData] = useState<any[]>([]);
-  const [ethChartData, setEthChartData] = useState<any[]>([]);
 
-  const generateInitialChartData = (price: number) => {
-    const data = [];
-    let currentValue = price;
-    for (let i = 5; i >= 0; i--) {
-        const date = new Date();
-        date.setDate(date.getDate() - i);
-        const randomFactor = (Math.random() - 0.5) * 0.05; // +/- 2.5%
-        const adjustedValue = i === 5 ? price : currentValue * (1 + randomFactor);
-        data.push({ date: date.toISOString().split('T')[0], value: parseFloat(adjustedValue.toFixed(2)) });
-        currentValue = adjustedValue;
-    }
-    return data;
-  }
-  
   const fetchPrices = () => {
     startTransition(async () => {
-      const btcResult = await handleGetCryptoPrice('bitcoin');
-      if ('price' in btcResult) {
-        setBtcPrice(btcResult.price);
-        setBtcChartData(generateInitialChartData(btcResult.price));
-      }
+        const btcResult = await handleGetCryptoPrice('bitcoin');
+        if ('price' in btcResult) {
+            setBtcData(btcResult);
+        } else {
+            console.error("Error fetching BTC data:", btcResult.error);
+            setBtcData(null);
+        }
 
-      const ethResult = await handleGetCryptoPrice('ethereum');
-      if ('price' in ethResult) {
-        setEthPrice(ethResult.price);
-        setEthChartData(generateInitialChartData(ethResult.price));
-      }
+        const ethResult = await handleGetCryptoPrice('ethereum');
+        if ('price' in ethResult) {
+            setEthData(ethResult);
+        } else {
+            console.error("Error fetching ETH data:", ethResult.error);
+            setEthData(null);
+        }
     });
   };
 
@@ -67,44 +56,7 @@ const MarketChartSection = () => {
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
 
-  useEffect(() => {
-    const interval = setInterval(() => {
-        setBtcChartData(currentData => {
-            if (currentData.length === 0) return [];
-            const newData = [...currentData];
-            const lastDataPoint = newData[newData.length - 1];
-            const randomFactor = (Math.random() - 0.5) * 0.02; // +/- 1%
-            const newValue = lastDataPoint.value * (1 + randomFactor);
-            
-            const newDate = new Date();
-            const newPoint = {
-                date: newDate.toISOString().split('T')[0],
-                value: parseFloat(newValue.toFixed(2))
-            };
-  
-            return [...newData.slice(1), newPoint];
-        });
-
-        setEthChartData(currentData => {
-            if (currentData.length === 0) return [];
-            const newData = [...currentData];
-            const lastDataPoint = newData[newData.length - 1];
-            const randomFactor = (Math.random() - 0.5) * 0.02; // +/- 1%
-            const newValue = lastDataPoint.value * (1 + randomFactor);
-            
-            const newDate = new Date();
-            const newPoint = {
-                date: newDate.toISOString().split('T')[0],
-                value: parseFloat(newValue.toFixed(2))
-            };
-  
-            return [...newData.slice(1), newPoint];
-        });
-    }, 3000); // Update every 3 seconds
-
-    return () => clearInterval(interval);
-  }, [btcPrice, ethPrice]);
-
+  const isLoading = isPending || (!btcData && !ethData);
 
   return (
     <section id="markets" className="py-20 md:py-32 bg-secondary animate-in fade-in-50 duration-1000">
@@ -128,13 +80,13 @@ const MarketChartSection = () => {
                     <CardHeader>
                         <CardTitle>BTC (Bitcoin)</CardTitle>
                         <CardDescription>
-                            Current Price: {isPending && !btcPrice ? <Skeleton className="h-6 w-24 inline-block" /> : btcPrice ? `$${btcPrice.toLocaleString()}` : 'N/A'}
+                            Current Price: {isLoading ? <Skeleton className="h-6 w-24 inline-block" /> : btcData ? `$${btcData.price.toLocaleString()}` : 'N/A'}
                         </CardDescription>
                     </CardHeader>
                     <CardContent>
-                        {btcChartData.length > 0 ? (
+                        {btcData?.chartData && btcData.chartData.length > 0 ? (
                             <ChartContainer config={chartConfig} className="w-full h-[200px]">
-                                <AreaChart data={btcChartData} margin={{ left: 12, right: 12 }} accessibilityLayer>
+                                <AreaChart data={btcData.chartData} margin={{ left: 12, right: 12 }} accessibilityLayer>
                                     <CartesianGrid vertical={false} />
                                     <XAxis dataKey="date" tickLine={false} axisLine={false} tickMargin={8} tickFormatter={(value) => new Date(value).toLocaleDateString('en-US', { month: 'short', day: 'numeric' })} />
                                     <YAxis tickLine={false} axisLine={false} tickMargin={8} domain={['dataMin - 100', 'dataMax + 100']} hide />
@@ -153,13 +105,13 @@ const MarketChartSection = () => {
                     <CardHeader>
                         <CardTitle>ETH (Ethereum)</CardTitle>
                         <CardDescription>
-                             Current Price: {isPending && !ethPrice ? <Skeleton className="h-6 w-24 inline-block" /> : ethPrice ? `$${ethPrice.toLocaleString()}` : 'N/A'}
+                             Current Price: {isLoading ? <Skeleton className="h-6 w-24 inline-block" /> : ethData ? `$${ethData.price.toLocaleString()}` : 'N/A'}
                         </CardDescription>
                     </CardHeader>
                     <CardContent>
-                         {ethChartData.length > 0 ? (
+                         {ethData?.chartData && ethData.chartData.length > 0 ? (
                             <ChartContainer config={chartConfig} className="w-full h-[200px]">
-                                <AreaChart data={ethChartData} margin={{ left: 12, right: 12 }} accessibilityLayer>
+                                <AreaChart data={ethData.chartData} margin={{ left: 12, right: 12 }} accessibilityLayer>
                                     <CartesianGrid vertical={false} />
                                     <XAxis dataKey="date" tickLine={false} axisLine={false} tickMargin={8} tickFormatter={(value) => new Date(value).toLocaleDateString('en-US', { month: 'short', day: 'numeric' })} />
                                     <YAxis tickLine={false} axisLine={false} tickMargin={8} domain={['dataMin - 100', 'dataMax + 100']} hide />

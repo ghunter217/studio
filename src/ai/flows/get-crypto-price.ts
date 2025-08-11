@@ -15,21 +15,33 @@ import { CryptoPriceInputSchema, CryptoPriceOutputSchema, CryptoPriceInput, Cryp
 const getCryptoPriceTool = ai.defineTool(
     {
         name: 'getCryptoPrice',
-        description: 'Get the current price of a cryptocurrency in USD.',
+        description: 'Get the current price and recent price history of a cryptocurrency in USD.',
         inputSchema: z.object({
-            ticker: z.string().describe('The ticker symbol of the cryptocurrency (e.g., BTC, ETH).'),
+            ticker: z.string().describe('The ticker symbol of the cryptocurrency (e.g., BTC, ETH). This should be the coingecko id (e.g. bitcoin, ethereum).'),
         }),
         outputSchema: z.object({
             price: z.number().describe('The current price of the cryptocurrency in USD.'),
+            chartData: z.array(z.object({
+                date: z.string().describe('The date of the data point.'),
+                value: z.number().describe('The price of the cryptocurrency at that date.'),
+            })).describe('The historical price data for the last 7 days.')
         }),
     },
     async (input) => {
-        const a = await fetch(`https://api.coingecko.com/api/v3/simple/price?ids=${input.ticker.toLowerCase()}&vs_currencies=usd`);
-        const data: any = await a.json();
+        const id = input.ticker.toLowerCase();
+        const priceResponse = await fetch(`https://api.coingecko.com/api/v3/simple/price?ids=${id}&vs_currencies=usd`);
+        const priceData: any = await priceResponse.json();
+        
+        const chartResponse = await fetch(`https://api.coingecko.com/api/v3/coins/${id}/market_chart?vs_currency=usd&days=7&interval=daily`);
+        const chartData: any = await chartResponse.json();
 
-        if (data[input.ticker.toLowerCase()] && data[input.ticker.toLowerCase()].usd) {
+        if (priceData[id] && priceData[id].usd && chartData.prices) {
             return {
-                price: data[input.ticker.toLowerCase()].usd,
+                price: priceData[id].usd,
+                chartData: chartData.prices.map((p: [number, number]) => ({
+                    date: new Date(p[0]).toISOString().split('T')[0],
+                    value: parseFloat(p[1].toFixed(2)),
+                })),
             };
         }
         
@@ -46,7 +58,7 @@ const prompt = ai.definePrompt({
     input: { schema: CryptoPriceInputSchema },
     output: { schema: CryptoPriceOutputSchema },
     tools: [getCryptoPriceTool],
-    prompt: `You are a cryptocurrency price checker. Use the getCryptoPrice tool to get the current price for the given ticker.`,
+    prompt: `You are a cryptocurrency price checker. Use the getCryptoPrice tool to get the current price and recent history for the given ticker. The ticker should be a coingecko ID.`,
 });
 
 const getCryptoPriceFlow = ai.defineFlow(
@@ -57,30 +69,15 @@ const getCryptoPriceFlow = ai.defineFlow(
     },
     async (input) => {
         const llmResponse = await prompt(input);
-        const toolResponse = llmResponse.toolRequest?.tool.output as { price: number } | undefined;
+        const toolResponse = llmResponse.toolRequest?.tool.output as CryptoPriceOutput | undefined;
 
-        if (toolResponse?.price) {
-            return {
-                price: toolResponse.price,
-            };
+        if (toolResponse?.price && toolResponse.chartData) {
+            return toolResponse;
         }
 
-        // It's possible the model doesn't use the tool and just returns the price directly.
-        // Let's check the structured output.
-        const outputPrice = llmResponse.output?.price;
-        if(outputPrice) {
-            return {
-                price: outputPrice
-            }
-        }
-
-        // As a last resort, maybe it just returned text.
-        const textResponse = llmResponse.text;
-        const priceMatch = textResponse?.match(/\$(\d+\.?\d*)/);
-        if(priceMatch?.[1]) {
-            return {
-                price: parseFloat(priceMatch[1])
-            }
+        const outputData = llmResponse.output;
+        if(outputData?.price && outputData?.chartData) {
+            return outputData;
         }
         
         throw new Error(`Could not determine price for ${input.ticker}`);

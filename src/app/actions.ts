@@ -9,6 +9,7 @@ export async function handleGetCryptoPrice(ticker: string): Promise<CryptoPriceO
     const result = await getCryptoPrice({ ticker });
     return result;
   } catch (error: any) {
+    console.error(`Error fetching price for ${ticker}:`, error);
     return {
       error: error.message || 'An error occurred while fetching the price.',
     };
