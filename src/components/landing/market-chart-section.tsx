@@ -32,15 +32,10 @@ const MarketChartSection = () => {
   const [btcChartData, setBtcChartData] = useState<any[]>([]);
   const [ethChartData, setEthChartData] = useState<any[]>([]);
 
-  const generateChartData = (price: number | null) => {
-    if (!price) {
-        return Array(6).fill({}).map((_, i) => ({
-            date: `Day ${i+1}`,
-            value: 0
-        }));
-    }
+  const generateInitialChartData = (price: number) => {
     const data = [];
     let currentValue = price;
+    // Generate historical data points with some variance
     for (let i = 5; i >= 0; i--) {
         const date = new Date();
         date.setDate(date.getDate() - i);
@@ -48,42 +43,23 @@ const MarketChartSection = () => {
         const randomFactor = (Math.random() - 0.5) * 0.05; // +/- 2.5%
         currentValue = currentValue * (1 + randomFactor);
     }
+    // Ensure the last point is the actual fetched price
+    data[5].value = parseFloat(price.toFixed(2));
     return data;
   }
   
-  const updateChartData = (price: number | null, setter: React.Dispatch<React.SetStateAction<any[]>>) => {
-      if(!price) return;
-      setter(currentData => {
-          if (currentData.length === 0) return [];
-          const newData = [...currentData];
-          const lastDataPoint = newData[newData.length - 1];
-          const randomFactor = (Math.random() - 0.5) * 0.02; // +/- 1%
-          const newValue = lastDataPoint.value * (1 + randomFactor);
-          
-          const newDate = new Date();
-          const newPoint = {
-              date: newDate.toISOString().split('T')[0],
-              value: parseFloat(newValue.toFixed(2))
-          };
-
-          const updatedData = [...newData.slice(1), newPoint];
-          return updatedData;
-      })
-  }
-
-
   const fetchPrices = () => {
     startTransition(async () => {
       const btcResult = await handleGetCryptoPrice('bitcoin');
       if ('price' in btcResult) {
         setBtcPrice(btcResult.price);
-        setBtcChartData(generateChartData(btcResult.price));
+        setBtcChartData(generateInitialChartData(btcResult.price));
       }
 
       const ethResult = await handleGetCryptoPrice('ethereum');
       if ('price' in ethResult) {
         setEthPrice(ethResult.price);
-        setEthChartData(generateChartData(ethResult.price));
+        setEthChartData(generateInitialChartData(ethResult.price));
       }
     });
   };
@@ -95,8 +71,41 @@ const MarketChartSection = () => {
 
   useEffect(() => {
     const interval = setInterval(() => {
-        updateChartData(btcPrice, setBtcChartData);
-        updateChartData(ethPrice, setEthChartData);
+        if(btcPrice) {
+            setBtcChartData(currentData => {
+                if (currentData.length === 0) return [];
+                const newData = [...currentData];
+                const lastDataPoint = newData[newData.length - 1];
+                const randomFactor = (Math.random() - 0.5) * 0.02; // +/- 1%
+                const newValue = lastDataPoint.value * (1 + randomFactor);
+                
+                const newDate = new Date();
+                const newPoint = {
+                    date: newDate.toISOString().split('T')[0],
+                    value: parseFloat(newValue.toFixed(2))
+                };
+      
+                return [...newData.slice(1), newPoint];
+            });
+        }
+
+        if(ethPrice) {
+            setEthChartData(currentData => {
+                if (currentData.length === 0) return [];
+                const newData = [...currentData];
+                const lastDataPoint = newData[newData.length - 1];
+                const randomFactor = (Math.random() - 0.5) * 0.02; // +/- 1%
+                const newValue = lastDataPoint.value * (1 + randomFactor);
+                
+                const newDate = new Date();
+                const newPoint = {
+                    date: newDate.toISOString().split('T')[0],
+                    value: parseFloat(newValue.toFixed(2))
+                };
+      
+                return [...newData.slice(1), newPoint];
+            });
+        }
     }, 3000); // Update every 3 seconds
 
     return () => clearInterval(interval);
