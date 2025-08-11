@@ -64,3 +64,45 @@ export async function handleGetCryptoPrice(ticker: string): Promise<CryptoPriceO
     };
   }
 }
+
+
+const ContactSchema = z.object({
+  name: z.string().min(2, { message: "Name must be at least 2 characters." }),
+  email: z.string().email({ message: "Please enter a valid email." }),
+  message: z.string().min(10, { message: "Message must be at least 10 characters long." }),
+});
+
+export type ContactFormState = {
+  message: string;
+  issues?: string[];
+  isSuccess: boolean;
+}
+
+export async function handleContactForm(
+  prevState: ContactFormState,
+  formData: FormData
+): Promise<ContactFormState> {
+  const validatedFields = ContactSchema.safeParse({
+    name: formData.get('name'),
+    email: formData.get('email'),
+    message: formData.get('message'),
+  });
+
+  if (!validatedFields.success) {
+    const issues = validatedFields.error.issues.map((issue) => issue.message);
+    return {
+      message: 'Validation failed.',
+      issues,
+      isSuccess: false,
+    };
+  }
+
+  // Simulate sending the message
+  await new Promise(resolve => setTimeout(resolve, 1000));
+  console.log('Contact form submitted:', validatedFields.data);
+
+  return {
+    message: 'Success!',
+    isSuccess: true,
+  };
+}

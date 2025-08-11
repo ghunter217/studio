@@ -1,8 +1,48 @@
+'use client';
+
+import { useActionState, useEffect, useRef } from 'react';
+import { useFormStatus } from 'react-dom';
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Textarea } from "@/components/ui/textarea";
+import { useToast } from '@/hooks/use-toast';
+import { handleContactForm, type ContactFormState } from '@/app/actions';
+import { Dialog, DialogContent, DialogHeader, DialogTitle, DialogDescription, DialogFooter, DialogClose } from '@/components/ui/dialog';
+import { CheckCircle, Loader2 } from 'lucide-react';
+
+const initialState: ContactFormState = {
+    message: '',
+    isSuccess: false,
+};
+
+function SubmitButton() {
+    const { pending } = useFormStatus();
+    return (
+        <Button type="submit" size="lg" disabled={pending}>
+            {pending ? <Loader2 className="mr-2 h-5 w-5 animate-spin" /> : null}
+            {pending ? 'Sending...' : 'Send Message'}
+        </Button>
+    )
+}
 
 const ContactSection = () => {
+    const [state, formAction] = useActionState(handleContactForm, initialState);
+    const { toast } = useToast();
+    const formRef = useRef<HTMLFormElement>(null);
+
+    useEffect(() => {
+        if (state.message && !state.isSuccess) {
+            toast({
+                title: 'Something went wrong',
+                description: state.issues?.join('\n') || state.message,
+                variant: 'destructive',
+            });
+        }
+        if (state.isSuccess) {
+            formRef.current?.reset();
+        }
+    }, [state, toast]);
+
     return (
         <section id="contact" className="py-20 md:py-32 animate-in fade-in-50 duration-1000">
             <div className="container px-4 md:px-6 max-w-4xl mx-auto">
@@ -12,17 +52,39 @@ const ContactSection = () => {
                         Have a question or want to work with us? We'd love to hear from you.
                     </p>
                 </div>
-                <form className="max-w-xl mx-auto space-y-4">
+                <form ref={formRef} action={formAction} className="max-w-xl mx-auto space-y-4">
                     <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
-                        <Input type="text" placeholder="Name" className="text-base" />
-                        <Input type="email" placeholder="Email" className="text-base" />
+                        <Input name="name" type="text" placeholder="Name" className="text-base" />
+                        <Input name="email" type="email" placeholder="Email" className="text-base" />
                     </div>
-                    <Textarea placeholder="Your message..." rows={5} className="text-base" />
+                    <Textarea name="message" placeholder="Your message..." rows={5} className="text-base" />
                     <div className="text-center">
-                        <Button type="submit" size="lg">Send Message</Button>
+                        <SubmitButton />
                     </div>
                 </form>
             </div>
+            <Dialog open={state.isSuccess}>
+                <DialogContent className="sm:max-w-lg bg-secondary border-primary shadow-2xl rounded-xl text-center">
+                    <DialogHeader>
+                        <div className="flex justify-center mb-4">
+                            <CheckCircle className="w-20 h-20 text-green-500 animate-in fade-in-25 zoom-in-50 duration-500" />
+                        </div>
+                        <DialogTitle className="text-3xl font-bold text-center text-primary">
+                            Message Sent!
+                        </DialogTitle>
+                        <DialogDescription className="text-center text-muted-foreground mt-2 text-lg">
+                            Thank you for reaching out. We've received your message and will get back to you shortly.
+                        </DialogDescription>
+                    </DialogHeader>
+                    <DialogFooter className="sm:justify-center mt-4">
+                        <DialogClose asChild>
+                            <Button type="button" size="lg" variant="outline">
+                                Close
+                            </Button>
+                        </DialogClose>
+                    </DialogFooter>
+                </DialogContent>
+            </Dialog>
         </section>
     );
 };
