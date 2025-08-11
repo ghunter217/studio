@@ -4,8 +4,8 @@ import { Toaster } from "@/components/ui/toaster";
 import ChatWidget from '@/components/landing/chat-widget';
 
 export const metadata: Metadata = {
-  title: 'Postflow AI - AI-Powered Trading Bot',
-  description: 'Leverage cutting-edge AI to automate your trading strategies. Boost your portfolio with Postflow AI.',
+  title: 'Postflow AI - Your AI Assistant for Trading, Betting, and Poker',
+  description: 'Leverage cutting-edge AI for smarter trading, betting, and poker strategies. Boost your success with Postflow AI.',
 };
 
 export default function RootLayout({

@@ -107,9 +107,9 @@ const MarketChartSection = () => {
     <section id="markets" className="py-20 md:py-32 bg-secondary animate-in fade-in-50 duration-1000">
       <div className="container px-4 md:px-6">
         <div className="text-center max-w-3xl mx-auto mb-12">
-          <h2 className="text-3xl md:text-4xl font-bold">Live Market Overview</h2>
+          <h2 className="text-3xl md:text-4xl font-bold">Live Market Insights</h2>
           <p className="mt-4 text-lg text-muted-foreground">
-            Stay updated with the latest trends in the crypto market.
+            Stay updated with the latest trends in the crypto and stock markets.
           </p>
         </div>
 

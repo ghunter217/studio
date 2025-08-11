@@ -14,38 +14,38 @@ import Autoplay from 'embla-carousel-autoplay';
 const testimonials = [
   {
     name: 'Sarah J.',
-    role: 'Day Trader',
+    role: 'Trader & Gamer',
     avatar: 'https://placehold.co/40x40.png',
     testimonial:
-      "Postflow AI has completely transformed my trading strategy. The AI is incredibly smart, and I've seen a 40% increase in my portfolio in just two months! No credit card was required to get started.",
+      "Postflow AI has completely transformed my strategy. The AI is incredibly smart, and I've seen a 40% increase in my portfolio and poker winnings in just two months! No credit card was required to get started.",
   },
   {
     name: 'Mark C.',
     role: 'Startup Founder',
     avatar: 'https://placehold.co/40x40.png',
     testimonial:
-      "I was skeptical about AI trading bots, but Postflow AI proved me wrong. It's easy to use, and the results speak for themselves. The free trial was a great way to test it out.",
+      "I was skeptical about AI bots, but Postflow AI proved me wrong. It's easy to use for my stock trades and weekend betting. The results speak for themselves. The free trial was a great way to test it out.",
   },
   {
     name: 'Emily R.',
     role: 'Financial Analyst',
     avatar: 'https://placehold.co/40x40.png',
     testimonial:
-      "The analytics are on par with some of the institutional tools I use. It's an impressive piece of technology for any serious trader.",
+      "The analytics are on par with some of the institutional tools I use for trading. It's an impressive piece of technology for any serious trader or bettor.",
   },
   {
     name: 'Alex T.',
     role: 'Hedge Fund Manager',
     avatar: 'https://placehold.co/40x40.png',
     testimonial:
-      'This tool is a lifesaver. It automates the most time-consuming parts of market analysis, allowing me to focus on high-level strategy.',
+      'This tool is a lifesaver. It automates the most time-consuming parts of market and odds analysis, allowing me to focus on high-level strategy.',
   },
   {
     name: 'Jessica L.',
-    role: 'Crypto Investor',
+    role: 'Crypto Investor & Poker Player',
     avatar: 'https://placehold.co/40x40.png',
     testimonial:
-      'We saw a significant uptick in our crypto portfolio after implementing Postflow AI. The bot it creates is spot-on for our risk tolerance.',
+      'We saw a significant uptick in our crypto portfolio and our poker winnings after implementing Postflow AI. The bot it creates is spot-on for our risk tolerance.',
   },
   {
     name: 'David P.',
@@ -59,28 +59,28 @@ const testimonials = [
     role: 'Small Business Owner',
     avatar: 'https://placehold.co/40x40.png',
     testimonial:
-      "I don't have a huge fund, so Postflow AI has been a game-changer for my investments. It gives me a professional edge without the high cost.",
+      "I don't have a huge fund, so Postflow AI has been a game-changer for my investments. It gives me a professional edge in stocks and betting without the high cost.",
   },
   {
     name: 'Kevin G.',
     role: 'Tech Blogger',
     avatar: 'https://placehold.co/40x40.png',
     testimonial:
-      'The ability to analyze trends and execute trades automatically is what sets Postflow AI apart. It keeps my investments active and optimized.',
+      'The ability to analyze trends and execute actions automatically is what sets Postflow AI apart. It keeps my investments and bets active and optimized.',
   },
   {
     name: 'Laura K.',
     role: 'Financial Advisor',
     avatar: 'https://placehold.co/40x40.png',
     testimonial:
-      'I use Postflow AI to manage a portion of my clients\' portfolios. It has significantly improved my workflow and their returns.',
+      'I use Postflow AI to manage a portion of my clients\' portfolios. It has significantly improved my workflow and their returns across different assets.',
   },
   {
     name: 'Michael B.',
     role: 'Real Estate Investor',
     avatar: 'https://placehold.co/40x40.png',
     testimonial:
-      'The platform is incredibly user-friendly. I was able to get up and running in minutes and saw an immediate improvement in my trading performance.',
+      'The platform is incredibly user-friendly. I was able to get up and running in minutes and saw an immediate improvement in my trading and betting performance.',
   },
 ];
 
@@ -94,7 +94,7 @@ const TestimonialsSection = () => {
       <div className="container px-4 md:px-6">
         <div className="text-center max-w-3xl mx-auto mb-12">
           <h2 className="text-3xl md:text-4xl font-bold">
-            Trusted by Traders Worldwide
+            Trusted by Users Worldwide
           </h2>
           <p className="mt-4 text-lg text-muted-foreground">
             Hear what our users have to say about their success with Postflow AI.
