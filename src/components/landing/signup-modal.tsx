@@ -24,7 +24,7 @@ import {
   FormMessage,
 } from "@/components/ui/form";
 import { Input } from "@/components/ui/input";
-import { Download, Loader2, CheckCircle } from "lucide-react";
+import { Download, Loader2, CheckCircle, Mail } from "lucide-react";
 import { useToast } from "@/hooks/use-toast";
 
 interface SignUpModalProps {
@@ -159,13 +159,18 @@ const SignUpModal = ({ children }: SignUpModalProps) => {
         <DialogContent className="sm:max-w-lg bg-secondary border-primary shadow-2xl rounded-xl text-center">
             <DialogHeader>
                 <div className="flex justify-center mb-4">
-                    <CheckCircle className="w-20 h-20 text-green-500 animate-in fade-in-25 zoom-in-50 duration-500" />
+                    <div className="relative">
+                        <CheckCircle className="w-20 h-20 text-green-500 animate-in fade-in-25 zoom-in-50 duration-500" />
+                        <div className="absolute -bottom-2 -right-2 bg-background p-2 rounded-full border-2 border-primary animate-in fade-in-50 slide-in-from-bottom-5 duration-700 delay-300">
+                           <Mail className="w-6 h-6 text-primary" />
+                        </div>
+                    </div>
                 </div>
                 <DialogTitle className="text-3xl font-bold text-center text-primary">
-                    Thank You!
+                    Welcome Aboard!
                 </DialogTitle>
-                <DialogDescription className="text-center text-muted-foreground mt-2 text-lg">
-                    Your account has been created successfully. Your download will begin shortly. Welcome aboard!
+                <DialogDescription className="text-center text-muted-foreground mt-2 text-lg px-4">
+                   Your account has been created and your download is on its way. Please check your inbox for a confirmation email to complete your setup.
                 </DialogDescription>
             </DialogHeader>
             <DialogFooter className="sm:justify-center mt-4">
