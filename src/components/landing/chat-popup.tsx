@@ -4,7 +4,6 @@ import { useState, useRef, useEffect, useTransition } from "react";
 import { Card, CardHeader, CardTitle, CardContent, CardFooter } from "@/components/ui/card";
 import { Input } from "@/components/ui/input";
 import { Button } from "@/components/ui/button";
-import { ScrollArea } from "@/components/ui/scroll-area";
 import { Bot, Send, Loader2 } from "lucide-react";
 import { handleChat } from "@/app/chat-actions";
 import type { ChatInput } from "@/ai/schemas/chat";
@@ -21,18 +20,10 @@ const ChatPopup = ({ onClose }: ChatPopupProps) => {
   ]);
   const [input, setInput] = useState("");
   const [isPending, startTransition] = useTransition();
-  const scrollAreaRef = useRef<HTMLDivElement>(null);
+  const messagesEndRef = useRef<HTMLDivElement>(null);
 
   const scrollToBottom = () => {
-    if (scrollAreaRef.current) {
-        const viewport = scrollAreaRef.current.querySelector('div[data-radix-scroll-area-viewport]');
-        if (viewport) {
-          viewport.scrollTo({
-              top: viewport.scrollHeight,
-              behavior: 'smooth'
-          });
-        }
-    }
+    messagesEndRef.current?.scrollIntoView({ behavior: "smooth" });
   };
 
   useEffect(() => {
@@ -59,32 +50,31 @@ const ChatPopup = ({ onClose }: ChatPopupProps) => {
 
   return (
     <div className="absolute bottom-20 right-0 w-80 animate-in fade-in-50 slide-in-from-bottom-10 duration-300">
-      <Card className="flex flex-col h-[28rem] shadow-2xl">
+      <Card className="flex flex-col h-[28rem] shadow-2xl overflow-hidden">
         <CardHeader className="flex flex-row items-center gap-3 bg-primary text-primary-foreground p-4">
             <Bot className="w-6 h-6" />
             <CardTitle className="text-lg">Postflow AI Assistant</CardTitle>
         </CardHeader>
-        <CardContent className="flex-1 p-4">
-            <ScrollArea className="h-full" ref={scrollAreaRef}>
-                <div className="space-y-4">
-                    {messages.map((message, index) => (
-                        <div key={index} className={`flex items-start gap-3 ${message.role === 'user' ? 'justify-end' : ''}`}>
-                            {message.role === 'model' && <Bot className="w-6 h-6 shrink-0" />}
-                            <div className={`p-3 rounded-lg max-w-[90%] ${message.role === 'user' ? 'bg-primary text-primary-foreground' : 'bg-secondary'}`}>
-                                <p className="text-sm whitespace-pre-wrap break-words">{message.content}</p>
-                            </div>
+        <CardContent className="flex-1 overflow-y-auto p-4">
+            <div className="space-y-4">
+                {messages.map((message, index) => (
+                    <div key={index} className={`flex items-start gap-3 ${message.role === 'user' ? 'justify-end' : ''}`}>
+                        {message.role === 'model' && <Bot className="w-6 h-6 shrink-0" />}
+                        <div className={`p-3 rounded-lg max-w-[90%] ${message.role === 'user' ? 'bg-primary text-primary-foreground' : 'bg-secondary'}`}>
+                            <p className="text-sm whitespace-pre-wrap break-words">{message.content}</p>
                         </div>
-                    ))}
-                    {isPending && (
-                        <div className="flex items-start gap-3">
-                            <Bot className="w-6 h-6 shrink-0" />
-                            <div className="p-3 rounded-lg bg-secondary">
-                                <Loader2 className="w-5 h-5 animate-spin" />
-                            </div>
+                    </div>
+                ))}
+                {isPending && (
+                    <div className="flex items-start gap-3">
+                        <Bot className="w-6 h-6 shrink-0" />
+                        <div className="p-3 rounded-lg bg-secondary">
+                            <Loader2 className="w-5 h-5 animate-spin" />
                         </div>
-                    )}
-                </div>
-            </ScrollArea>
+                    </div>
+                )}
+                 <div ref={messagesEndRef} />
+            </div>
         </CardContent>
         <CardFooter className="p-4 border-t">
           <form onSubmit={handleSubmit} className="flex w-full gap-2">
