@@ -61,7 +61,7 @@ const Footer = () => {
             </div>
             <div className="flex items-center gap-2 text-sm text-muted-foreground">
               <ShieldCheck className="w-5 h-5 text-primary" />
-              <span>Data Insured</span>
+              <span>Assets Insured by Lloyd's of London</span>
             </div>
             <div className="flex space-x-4">
               <a href="#" className="text-muted-foreground hover:text-primary transition-colors"><Twitter className="h-5 w-5" /></a>
