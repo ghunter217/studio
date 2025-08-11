@@ -18,7 +18,7 @@ const initialState: ContactFormState = {
 function SubmitButton() {
     const { pending } = useFormStatus();
     return (
-        <Button type="submit" size="lg" disabled={pending}>
+        <Button type="submit" size="lg" disabled={pending} className="w-full transition-transform duration-300 hover:scale-105 active:scale-95">
             {pending ? <Loader2 className="mr-2 h-5 w-5 animate-spin" /> : null}
             {pending ? 'Sending...' : 'Send Message'}
         </Button>
@@ -57,23 +57,30 @@ const ContactSection = () => {
 
     return (
         <section id="contact" className="py-20 md:py-32 animate-in fade-in-50 duration-1000">
-            <div className="container px-4 md:px-6 max-w-4xl mx-auto">
+            <div className="container px-4 md:px-6 max-w-2xl mx-auto">
                 <div className="text-center mb-12">
                     <h2 className="text-3xl md:text-4xl font-bold">Get in Touch</h2>
                     <p className="mt-4 text-lg text-muted-foreground">
                         Have a question or want to work with us? We'd love to hear from you.
                     </p>
                 </div>
-                <form ref={formRef} action={formAction} className="max-w-xl mx-auto space-y-4">
-                    <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
-                        <Input name="name" type="text" placeholder="Name" className="text-base" required />
-                        <Input name="email" type="email" placeholder="Email" className="text-base" required />
-                    </div>
-                    <Textarea name="message" placeholder="Your message..." rows={5} className="text-base" required />
-                    <div className="text-center">
-                        <SubmitButton />
-                    </div>
-                </form>
+
+                <div className="group rounded-xl border bg-secondary/50 p-8 shadow-2xl shadow-primary/10 transition-all duration-300 hover:shadow-primary/20 hover:-translate-y-2" style={{ perspective: '1000px' }}>
+                    <form 
+                        ref={formRef} 
+                        action={formAction} 
+                        className="space-y-6 transition-transform duration-300 group-hover:[transform:rotateX(2deg)]"
+                    >
+                        <div className="grid grid-cols-1 sm:grid-cols-2 gap-6">
+                            <Input name="name" type="text" placeholder="Name" className="text-base py-6" required />
+                            <Input name="email" type="email" placeholder="Email" className="text-base py-6" required />
+                        </div>
+                        <Textarea name="message" placeholder="Your message..." rows={5} className="text-base" required />
+                        <div className="text-center pt-4">
+                            <SubmitButton />
+                        </div>
+                    </form>
+                </div>
             </div>
             <Dialog open={isDialogOpen} onOpenChange={setIsDialogOpen}>
                 <DialogContent className="sm:max-w-lg bg-secondary border-primary shadow-2xl rounded-xl text-center">
