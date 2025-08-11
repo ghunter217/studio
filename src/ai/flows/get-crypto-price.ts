@@ -29,10 +29,14 @@ const getCryptoPriceTool = ai.defineTool(
     },
     async (input) => {
         const id = input.ticker.toLowerCase();
-        const priceResponse = await fetch(`https://api.coingecko.com/api/v3/simple/price?ids=${id}&vs_currencies=usd`);
+        const apiKey = process.env.COINGECKO_API_KEY;
+        const baseUrl = apiKey ? 'https://pro-api.coingecko.com/api/v3' : 'https://api.coingecko.com/api/v3';
+        const apiKeyQuery = apiKey ? `&x_cg_pro_api_key=${apiKey}` : '';
+
+        const priceResponse = await fetch(`${baseUrl}/simple/price?ids=${id}&vs_currencies=usd${apiKeyQuery}`);
         const priceData: any = await priceResponse.json();
         
-        const chartResponse = await fetch(`https://api.coingecko.com/api/v3/coins/${id}/market_chart?vs_currency=usd&days=7&interval=daily`);
+        const chartResponse = await fetch(`${baseUrl}/coins/${id}/market_chart?vs_currency=usd&days=7&interval=daily${apiKeyQuery}`);
         const chartData: any = await chartResponse.json();
 
         if (priceData[id] && priceData[id].usd && chartData.prices) {
