@@ -18,7 +18,7 @@ import {
 import { Button } from '@/components/ui/button';
 import { handleGetCryptoPrice } from '@/app/actions';
 import { Skeleton } from '../ui/skeleton';
-import type { CryptoPriceOutput } from '@/services/coingecko';
+import type { CryptoPriceOutput } from '@/services/crypto';
 
 const chartConfig = {
     value: {
@@ -34,18 +34,18 @@ const MarketChartSection = () => {
   const fetchPrices = () => {
     startTransition(async () => {
         const btcResult = await handleGetCryptoPrice('bitcoin');
-        if ('price' in btcResult) {
+        if (btcResult && 'price' in btcResult) {
             setBtcData(btcResult);
         } else {
-            console.error("Error fetching BTC data:", btcResult.error);
+            console.error("Error fetching BTC data:", btcResult);
             setBtcData(null);
         }
 
         const ethResult = await handleGetCryptoPrice('ethereum');
-        if ('price' in ethResult) {
+        if (ethResult && 'price' in ethResult) {
             setEthData(ethResult);
         } else {
-            console.error("Error fetching ETH data:", ethResult.error);
+            console.error("Error fetching ETH data:", ethResult);
             setEthData(null);
         }
     });
@@ -56,7 +56,7 @@ const MarketChartSection = () => {
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
 
-  const isLoading = isPending || (!btcData && !ethData);
+  const isLoading = isPending;
 
   return (
     <section id="markets" className="py-20 md:py-32 bg-secondary animate-in fade-in-50 duration-1000">
@@ -80,23 +80,27 @@ const MarketChartSection = () => {
                     <CardHeader>
                         <CardTitle>BTC (Bitcoin)</CardTitle>
                         <CardDescription>
-                            Current Price: {isLoading ? <Skeleton className="h-6 w-24 inline-block" /> : btcData ? `$${btcData.price.toLocaleString()}` : 'N/A'}
+                            Current Price: {isLoading ? <Skeleton className="h-6 w-24 inline-block" /> : btcData ? `$${Number(btcData.price).toLocaleString()}` : 'N/A'}
                         </CardDescription>
                     </CardHeader>
                     <CardContent>
-                        {btcData?.chartData && btcData.chartData.length > 0 ? (
+                        {isLoading ? (
+                            <div className="w-full h-[200px] p-4">
+                                <Skeleton className="w-full h-full" />
+                            </div>
+                        ) : btcData?.chartData && btcData.chartData.length > 0 ? (
                             <ChartContainer config={chartConfig} className="w-full h-[200px]">
                                 <AreaChart data={btcData.chartData} margin={{ left: 12, right: 12 }} accessibilityLayer>
                                     <CartesianGrid vertical={false} />
                                     <XAxis dataKey="date" tickLine={false} axisLine={false} tickMargin={8} tickFormatter={(value) => new Date(value).toLocaleDateString('en-US', { month: 'short', day: 'numeric' })} />
-                                    <YAxis tickLine={false} axisLine={false} tickMargin={8} domain={['dataMin - 100', 'dataMax + 100']} hide />
+                                    <YAxis tickLine={false} axisLine={false} tickMargin={8} domain={['auto', 'auto']} hide />
                                     <ChartTooltip cursor={false} content={<ChartTooltipContent indicator="line" />} />
                                     <Area dataKey="value" type="natural" fill={'hsl(var(--chart-4))'} fillOpacity={0.4} stroke={'hsl(var(--chart-4))'} stackId="a" />
                                 </AreaChart>
                             </ChartContainer>
                         ) : (
-                           <div className="w-full h-[200px] p-4">
-                                <Skeleton className="w-full h-full" />
+                           <div className="w-full h-[200px] p-4 flex items-center justify-center text-muted-foreground">
+                                No data available.
                            </div>
                         )}
                     </CardContent>
@@ -105,23 +109,27 @@ const MarketChartSection = () => {
                     <CardHeader>
                         <CardTitle>ETH (Ethereum)</CardTitle>
                         <CardDescription>
-                             Current Price: {isLoading ? <Skeleton className="h-6 w-24 inline-block" /> : ethData ? `$${ethData.price.toLocaleString()}` : 'N/A'}
+                             Current Price: {isLoading ? <Skeleton className="h-6 w-24 inline-block" /> : ethData ? `$${Number(ethData.price).toLocaleString()}` : 'N/A'}
                         </CardDescription>
                     </CardHeader>
                     <CardContent>
-                         {ethData?.chartData && ethData.chartData.length > 0 ? (
+                         {isLoading ? (
+                            <div className="w-full h-[200px] p-4">
+                                <Skeleton className="w-full h-full" />
+                            </div>
+                         ) : ethData?.chartData && ethData.chartData.length > 0 ? (
                             <ChartContainer config={chartConfig} className="w-full h-[200px]">
                                 <AreaChart data={ethData.chartData} margin={{ left: 12, right: 12 }} accessibilityLayer>
                                     <CartesianGrid vertical={false} />
                                     <XAxis dataKey="date" tickLine={false} axisLine={false} tickMargin={8} tickFormatter={(value) => new Date(value).toLocaleDateString('en-US', { month: 'short', day: 'numeric' })} />
-                                    <YAxis tickLine={false} axisLine={false} tickMargin={8} domain={['dataMin - 100', 'dataMax + 100']} hide />
+                                    <YAxis tickLine={false} axisLine={false} tickMargin={8} domain={['auto', 'auto']} hide />
                                     <ChartTooltip cursor={false} content={<ChartTooltipContent indicator="line" />} />
                                     <Area dataKey="value" type="natural" fill={'hsl(var(--chart-5))'} fillOpacity={0.4} stroke={'hsl(var(--chart-5))'} stackId="a" />
                                 </AreaChart>
                             </ChartContainer>
                         ) : (
-                            <div className="w-full h-[200px] p-4">
-                                <Skeleton className="w-full h-full" />
+                            <div className="w-full h-[200px] p-4 flex items-center justify-center text-muted-foreground">
+                               No data available.
                            </div>
                         )}
                     </CardContent>

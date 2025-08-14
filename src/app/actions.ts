@@ -1,7 +1,7 @@
 'use server';
 
-import { getCryptoPriceData } from '@/services/coingecko';
-import type { CryptoPriceOutput } from '@/services/coingecko';
+import { getCryptoPriceData } from '@/services/crypto';
+import type { CryptoPriceOutput } from '@/services/crypto';
 import { z } from 'zod';
 
 export async function handleGetCryptoPrice(ticker: string): Promise<CryptoPriceOutput | { error: string }> {
