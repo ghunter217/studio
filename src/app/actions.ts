@@ -1,21 +1,6 @@
 'use server';
 
-import { getCryptoPriceData } from '@/services/crypto';
-import type { CryptoPriceOutput } from '@/services/crypto';
 import { z } from 'zod';
-
-export async function handleGetCryptoPrice(ticker: string): Promise<CryptoPriceOutput | { error: string }> {
-  try {
-    const result = await getCryptoPriceData(ticker);
-    return result;
-  } catch (error: any) {
-    console.error(`Error fetching price for ${ticker}:`, error);
-    return {
-      error: error.message || 'An error occurred while fetching the price.',
-    };
-  }
-}
-
 
 const ContactSchema = z.object({
   name: z.string().min(2, { message: "Name must be at least 2 characters." }),

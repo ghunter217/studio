@@ -30,11 +30,6 @@ const Header = () => {
             </Link>
           </Button>
            <Button variant="ghost" asChild>
-            <Link href="#markets">
-              Markets
-            </Link>
-          </Button>
-          <Button variant="ghost" asChild>
             <Link href="#testimonials">
               Testimonials
             </Link>
