@@ -47,8 +47,12 @@ export async function getCryptoPriceData(ticker: string): Promise<CryptoPriceOut
       price,
       chartData,
     };
-  } catch (error) {
+  } catch (error: any) {
     console.error(`Failed to fetch data for ${ticker}:`, error);
+    // If the error is a 404, it's expected, so we don't need to log it as a critical failure.
+    if (error.message && error.message.includes('status: 404')) {
+        console.log(`Asset ${ticker} not found. Returning empty data.`);
+    }
     // Return empty data on failure to prevent crashing the component
     return {
         price: 'N/A',
